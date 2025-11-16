@@ -158,7 +158,7 @@ input[type=radio]:checked ~ label {
 main {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    height: 100vh; /* make it full screen height */
     align-items: center;
     box-sizing: border-box;
     margin-left: 20px;
@@ -173,9 +173,12 @@ main {
 }
 
 #chatBox {
-    width: 100%;
     display:flex;
     flex-direction: column;
+    width: 100%;
+    flex: 1;            
+    overflow-y: auto;  
+    padding-bottom: 10px;
 }
 
 .messageContainer {
@@ -199,7 +202,9 @@ main {
 }
 
 .inputBox {
-    display:flex;
+     width: 100%;
+    display: flex;
+    padding-top: 10px;
 }
 
 .inputBox, #message {

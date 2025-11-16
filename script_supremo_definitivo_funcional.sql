@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.consulta (
   id_paciente INT NOT NULL,
   id_medico INT NOT NULL,
   data_consulta DATE NOT NULL,
-  hora_consulta DATETIME NOT NULL,
+  hora_consulta TIME NOT NULL,
   status VARCHAR(255) NOT NULL,
   gravacao_link VARCHAR(45) NOT NULL,
   link_videochamada VARCHAR(45) NOT NULL,
