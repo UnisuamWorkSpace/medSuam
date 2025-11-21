@@ -181,8 +181,8 @@ $consultas = [];
                         <span><?php echo htmlspecialchars($row['status']);?></span>
                     </div>
                     <div class="topRight">
-                        <h3>Data: <?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></h3>
-                        <span class="horaConsulta">Hora: <?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta'])));?></span>
+                        <h3 class="dataConsulta"><?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></h3>
+                        <span class="horaConsulta"><?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta'])));?></span>
                         <span class="docName">Médico: Dr(a) <?php echo htmlspecialchars($row['nome_medico']); ?></span>
                         <div class="gapBetween">
                             <i class="bi bi-clipboard2-pulse"></i>
@@ -192,15 +192,23 @@ $consultas = [];
                     </div>
                     
                     <div class="bottomRight spaceBetween">
-                        <a href="#" class="hide">Compartilhar</a>
+                        <a href="../geradorPdf.php?id_consulta=<?= $row['id_consulta'] ?>" target="_blank" class="compartilharLink hide">Baixar PDF do Chat</a>
+                        <button class="mostrarResultadosBtn hide">
+                            Mostrar Resultados
+                        </button>
                         <form action="../chat.php" method="post">
+                            
                             <input type="hidden" name="nomeMedico"  value="<?php echo htmlspecialchars($row['nome_medico']); ?>">
 
                             <input type="hidden" name="idMedico"  value="<?php echo htmlspecialchars($row['id_medico']); ?>">
-                            <button type="submit" class="mostrarResultadosBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
-                                Mostrar Resultados
+                            <button type="submit" class="irParaConsultaBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
+                                Ir para consulta
                             </button>
                         </form>
+                       
+
+
+
                     </div>
 
                 </div>

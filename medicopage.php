@@ -20,10 +20,6 @@
         WHERE id_medico='{$_SESSION['id_medico']}'
         ORDER BY c.data_consulta DESC, c.hora_consulta DESC";
 
-    /* $sql = "SELECT *
-     FROM consulta 
-     WHERE id_medico='{$_SESSION['id_medico']}'
-     ORDER BY data_consulta DESC, hora_consulta DESC "; */
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) === 0) {
         $consultas = 0;
@@ -238,9 +234,9 @@ if (mysqli_num_rows($result) === 0) {
                             </thead>
                             <tbody>
                                 <?php foreach ($consultas as $row): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></td>
-                                        <td><?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta']))); ?></td>
+                                    <tr class="resultadosConsultas">
+                                        <td class="dataConsulta"><?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></td>
+                                        <td class="horaConsulta"><?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta']))); ?></td>
                                         <td><span class="status"><?php echo htmlspecialchars($row['status']); ?></span></td>
                                         <td>
                                             <form action="medicopage.php" method="post" style="display:inline;">
@@ -252,11 +248,11 @@ if (mysqli_num_rows($result) === 0) {
                                                     <input class="editConsultaConfirmarBtn editConsultaBtn hide" type="submit" name="confirmar" value="confirmar">
                                                 </div>
                                             </form>
-                                            <form action="./chatMedico.php" method="post">
+                                            <form class="irParaConsultaForm hide" action="./chatMedico.php" method="post">
                                                 <input type="hidden" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
                                                 <input type="hidden" name="paciente" value="<?php echo htmlspecialchars($row['id_paciente']); ?>">
                                                 <input type="hidden" name="nomePaciente" value="<?php echo htmlspecialchars($row['nome_paciente']); ?>">
-                                                <button type="submit">Editar status</button>
+                                                <button class="irParaConsultaBtn" type="submit">Ir para Consulta</button>
                                             </form>
                                         </td>
                                     </tr>

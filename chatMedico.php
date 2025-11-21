@@ -2,6 +2,8 @@
 session_start();
 include "dbMedsuam.php";
 
+
+
 // POST variables from previous page
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
     $consulta = mysqli_real_escape_string($conn, $_POST['consulta']);   // appointment_id
@@ -9,6 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
     $nomePaciente = mysqli_real_escape_string($conn, $_POST['nomePaciente']);
     /* $parts = explode(" ", $nomePaciente); // splits by space
     $nomePaciente = $parts[0];           // take the first part */
+    $sql = "SELECT status FROM consulta WHERE id_consulta = $consulta";
+    $result =  mysqli_query($conn, $sql);
+    $account = mysqli_fetch_assoc($result);
+    if($account['status'] === "finalizado") {
+       header('location: medicopage.php');
+    } 
 }
 
 // logged doctor ID
@@ -35,6 +43,17 @@ $idmedico = $_SESSION['id_medico'] ?? 1;
                             <img class="logo" src="./images/Logo_medsuam-removebg-preview (1).png" alt="logo"/>
                         </a>
                     </div>
+                </li>
+                <li>
+                    <form action="./finalizarConsulta.php" method="post">
+                        <input type="hidden" name="consulta" value="<?php echo $consulta ?? ''; ?>">
+                        <input type="hidden" name="paciente" value="<?php echo $idpaciente ?? ''; ?>">
+                        <input type="hidden" name="paciente" value="<?php echo $nomePaciente ?? ''; ?>">
+                        <input type="hidden" name="consulta" value="<?php echo htmlspecialchars($consulta)?>">
+                        <button class="finalizarConsultaBtn" name="finalizarConsulta" type="submit">
+                            Finalizar Consulta 
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

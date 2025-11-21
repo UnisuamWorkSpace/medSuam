@@ -8,6 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
     $nomeMedico = mysqli_real_escape_string($conn, $_POST['nomeMedico']);
     $parts = explode(" ", $nomeMedico); // splits by space
     $nomeMedico = $parts[0];           // take the first part
+    
+    // Verifica se a consulta já foi finalizada
+    $sql = "SELECT status FROM consulta WHERE id_consulta = $consulta";
+    $result =  mysqli_query($conn, $sql);
+    $account = mysqli_fetch_assoc($result);
+    if($account['status'] === "Finalizado") {
+       header('location: userpage.php');
+    } 
 }
 
 $idPaciente = $_SESSION['id'] ?? 1;

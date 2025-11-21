@@ -416,3 +416,45 @@ $(".deletarContaBtn").on("click", () => {
 $(".naoDeletarContaBtn").on("click", () => {
   $(".deletarContaDiv").removeClass("showDeletarDiv");
 });
+
+
+$('.resultadosConsultas').each(function() {
+
+    let status = $(this).find('.status').text().trim().toLowerCase();
+    let irParaConsulta = $(this).find('.irParaConsultaForm');
+
+    if (status === "confirmado") {
+
+    // ✔ get hour from the CURRENT item, not from the entire document
+    const consultaHora = $(this).find('.horaConsulta').text().trim();
+
+    function toMinutes(hhmm) {
+      const [h, m] = hhmm.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    const now = new Date();
+    const hour = String(now.getHours()).padStart(2, "0");
+    const minute = String(now.getMinutes()).padStart(2, "0");
+    const formattedTime = `${hour}:${minute}`;
+
+    const diff = toMinutes(consultaHora) - toMinutes(formattedTime);
+    
+    const agora = new Date(); // Creates a Date object for the current date and time
+    const dataAgora = agora.toLocaleDateString('pt-BR'); 
+    console.log(dataAgora); 
+
+    const dataConsulta = $(this).find('.dataConsulta').text().trim();
+    console.log(dataConsulta);
+    // Show button when 10 minutes before or during the time
+    if (diff <= 10 && dataAgora === dataConsulta) { 
+      irParaConsulta.removeClass('hide');
+    }
+  }/* else if (status === "finalizado") {
+    statusBox.addClass('finalizadoSpan');
+    compartilhar.removeClass('hide');
+    mostrarResultados.removeClass('hide');
+  } */
+
+    
+});

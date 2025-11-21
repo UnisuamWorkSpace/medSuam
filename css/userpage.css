@@ -487,6 +487,10 @@ html.dark .dadosContainerContent.noBorder {
     color: #fff;
 }
 
+.finalizadoSpan {
+    background-color: rgb(109, 185, 109);
+    color: white;
+}
 
 
 .horaConsulta {
@@ -507,7 +511,7 @@ html.dark .dadosContainerContent.noBorder {
     gap:20px;
 }
 
-.mostrarResultadosBtn {
+.mostrarResultadosBtn, .irParaConsultaBtn {
     height:auto;
     width:auto;
     padding: 10px 20px;
@@ -519,7 +523,7 @@ html.dark .dadosContainerContent.noBorder {
     font-weight: bold;
 }
 
-.mostrarResultadosBtn:hover {
+.mostrarResultadosBtn:hover, .irParaConsultaBtn {
     background-color: rgb(0, 157, 255);
 } 
 
