@@ -209,29 +209,12 @@
                 <input type="hidden" name="idMedico" value="<?php echo htmlspecialchars($idMedico); ?>">
                 <input class="dataAgendamento" type="date" name="dataAgendamento" id="depoisDeAmanha" readonly>
                 <div class="horarioAgendamento">
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="11:00" required>
-                        11:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="14:00" required>
-                        14:00
-                    </label>  
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="17:00" required>
-                        17:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="20:00" required>
-                        20:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="22:00" required>
-                        22:00
-                    </label>
+            
+                    <input type="text" name="agendamento" id="agendamento" requried>
                     <input class="agendarConsultaBtn" type="submit" name="agendarConsulta" value="Agendar consulta">
                 </div>         
             </div>
+            
             
             
 
@@ -239,6 +222,7 @@
     </main>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
     <script src="../js/userpage.js"></script>
 
 </body>

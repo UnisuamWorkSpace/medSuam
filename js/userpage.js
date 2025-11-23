@@ -433,3 +433,5 @@ $('.resultadosContainer').each(function() {
 
     
 });
+
+$("#agendamento").inputmask("99:99");
