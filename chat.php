@@ -2,13 +2,22 @@
 session_start();
 include "dbMedsuam.php";
 
-// POST variables from previous page
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
-    $consulta = mysqli_real_escape_string($conn, $_POST['consulta']);  // appointment_id
-    $idMedico = mysqli_real_escape_string($conn, $_POST['idMedico']);  // receiver_id
+    $consulta = mysqli_real_escape_string($conn, $_POST['consulta']); 
+    $idMedico = mysqli_real_escape_string($conn, $_POST['idMedico']);  
+    $nomeMedico = mysqli_real_escape_string($conn, $_POST['nomeMedico']);
+    $parts = explode(" ", $nomeMedico); // splits by space
+    $nomeMedico = $parts[0];           // take the first part
+    
+    // Verifica se a consulta já foi finalizada
+    $sql = "SELECT status FROM consulta WHERE id_consulta = $consulta";
+    $result =  mysqli_query($conn, $sql);
+    $account = mysqli_fetch_assoc($result);
+    if($account['status'] === "Finalizado") {
+       header('location: userpage.php');
+    } 
 }
 
-// logged patient ID
 $idPaciente = $_SESSION['id'] ?? 1;
 ?>
 <!DOCTYPE html>
@@ -40,7 +49,7 @@ $idPaciente = $_SESSION['id'] ?? 1;
         <div id="chatBox"></div>
 
         <div class="inputBox">
-            <input type="text" id="message" placeholder="Digite sua mensagem...">
+            <textarea  id="message" placeholder="Digite sua mensagem..."></textarea>
             <button id="sendBtn"><i class="bi bi-send-arrow-up-fill"></i></button>
         </div>
     </main>
@@ -48,13 +57,12 @@ $idPaciente = $_SESSION['id'] ?? 1;
 </html>
 
 <script>
-// ✔ Correct & safe variables
+
 const sender_id      = <?php echo json_encode($idPaciente); ?>;
 const sender_role    = "paciente";
 const receiver_id    = <?php echo json_encode($idMedico ?? 1); ?>;
 const appointment_id = <?php echo json_encode($consulta ?? 1); ?>;
-
-// Load messages every 2 seconds
+const nomeMedico   = <?php echo json_encode($nomeMedico ?? "Medico"); ?>;
 setInterval(loadMessages, 2000);
 loadMessages();
 
@@ -67,7 +75,6 @@ function loadMessages() {
 
         data.forEach(msg => {
 
-            // ✔ Only messages from THIS patient bubble right
             const isMe = msg.sender_id == sender_id && msg.sender_role === "paciente";
 
             const timeOnly = new Date(msg.sent_at).toLocaleTimeString("pt-BR", {
@@ -77,8 +84,8 @@ function loadMessages() {
 
             chatBox.innerHTML += `
                 <div class="messageContainer ${isMe ? "right" : "left"}">
-                    <strong>${isMe ? "Você" : "Médico"}:</strong> 
-                    <p>${msg.message}</p>
+                    <strong>${isMe ? "Você" : "Dr(a). " + nomeMedico}:</strong> 
+                    <p>${msg.message.replace(/\n/g, "<br>")}</p>
                     <span>${timeOnly}</span>
                 </div>
             `;
@@ -95,7 +102,7 @@ function sendMessage() {
 
     const formData = new FormData();
     formData.append("sender_id", sender_id);
-    formData.append("sender_role", sender_role); // ✔ super important
+    formData.append("sender_role", sender_role);
     formData.append("receiver_id", receiver_id);
     formData.append("appointment_id", appointment_id);
     formData.append("message", text);
@@ -113,4 +120,11 @@ function sendMessage() {
 }
 
 document.getElementById("sendBtn").onclick = sendMessage;
+
+document.getElementById("message").addEventListener('keydown', function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); 
+        sendMessage();      
+    }
+});
 </script>

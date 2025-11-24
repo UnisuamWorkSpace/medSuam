@@ -33,6 +33,7 @@
                         $_SESSION['paciente'] = $account['nome_paciente'];
                         $_SESSION['email'] = $account['email_paciente'];
                         $_SESSION['id'] = $account['id_paciente'];
+                        $_SESSION['id_paciente'] = $account['id_paciente'];
                         header('location: autenticacao.php');
                         exit;
                         }else {

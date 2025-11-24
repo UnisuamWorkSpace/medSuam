@@ -241,6 +241,7 @@ main {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     padding-left: 10px;
+    font-size: 15px;
 }
 
 #sendBtn {
@@ -266,3 +267,21 @@ main {
     color: whitesmoke;
 }
 
+.finalizarConsultaBtn {
+    background-color: var(--padrao);
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 15px;
+    cursor:pointer;
+    transition: 600ms ease-in-out;
+    transform: scale(1.0);
+}
+
+.finalizarConsultaBtn:hover {
+    background-color: white;
+    color: var(--cianoClaro);
+    border: 2px solid var(--cianoClaro);
+    transform: scale(1.1);
+}

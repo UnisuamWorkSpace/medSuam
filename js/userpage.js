@@ -1,5 +1,3 @@
-console.log('oi');
-
 $('.linkPage').on('click', (event) => {
     
   $(".hideableDiv").removeClass("hide");
@@ -378,6 +376,62 @@ const depoisDeAmanha = new Date(hoje);
 depoisDeAmanha.setDate(hoje.getDate() + 2);
 $("#depoisDeAmanha").val(formatDateInput(depoisDeAmanha));
 
-$('.statusConsultaPaciente:contains("aguardando")').addClass('aguardandoSpan');
-$('.statusConsultaPaciente:contains("recusado")').addClass('recusadoSpan');
-$('.statusConsultaPaciente:contains("confirmado")').addClass('confirmadoSpan');
+$('.resultadosContainer').each(function() {
+
+    let status = $(this).find('.statusConsultaPaciente span').text().trim().toLowerCase();
+
+    let compartilhar = $(this).find('.compartilharLink');
+    let mostrarResultados = $(this).find('.mostrarResultadosBtn');
+    let irParaConsulta = $(this).find('.irParaConsultaBtn');
+    let statusBox = $(this).find('.statusConsultaPaciente');
+
+
+    compartilhar.addClass('hide');
+    mostrarResultados.addClass('hide');
+    irParaConsulta.addClass('hide');
+
+    if (status === "aguardando") {
+        statusBox.addClass('aguardandoSpan');
+    }
+    else if (status === "recusado") {
+        statusBox.addClass('recusadoSpan');
+    }
+    else if (status === "confirmado") {
+
+    statusBox.addClass('confirmadoSpan');
+
+    // ✔ get hour from the CURRENT item, not from the entire document
+    const consultaHora = $(this).find('.horaConsulta').text().trim();
+
+    function toMinutes(hhmm) {
+      const [h, m] = hhmm.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    const now = new Date();
+    const hour = String(now.getHours()).padStart(2, "0");
+    const minute = String(now.getMinutes()).padStart(2, "0");
+    const formattedTime = `${hour}:${minute}`;
+
+    const diff = toMinutes(consultaHora) - toMinutes(formattedTime);
+    
+    const agora = new Date(); // Creates a Date object for the current date and time
+    const dataAgora = agora.toLocaleDateString('pt-BR'); 
+    console.log(dataAgora); 
+
+    const dataConsulta = $(this).find('.dataConsulta').text().trim();
+    console.log(dataConsulta);
+    // Show button when 10 minutes before or during the time
+    if (diff <= 10 && dataAgora === dataConsulta) { 
+      irParaConsulta.removeClass('hide');
+    }
+  }else if (status === "finalizado") {
+    statusBox.addClass('finalizadoSpan');
+    compartilhar.removeClass('hide');
+    mostrarResultados.removeClass('hide');
+  }
+
+    
+});
+
+$("#agendamento").inputmask("99:99");

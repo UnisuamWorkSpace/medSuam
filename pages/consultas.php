@@ -24,6 +24,22 @@ $consultas = [];
         }
         $totalConsultas = count($consultas);
     }
+
+    if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['mostrarResultados'])) {
+        $consulta = mysqli_real_escape_string($conn, $_POST['mostrarResultados']);
+        $idMedico = mysqli_real_escape_string($conn, $_POST['idMedico']);
+        
+        $sql2 = "SELECT 
+        c. *,
+        m.nome_medico,
+        e.nome AS especialidade
+        FROM consulta  AS c
+        INNER JOIN medico AS m ON m.id_medico = $idMedico
+        INNER JOIN especialidade AS e ON e.id_medico = $idMedico
+         WHERE id_consulta = $consulta";
+        $result2 = mysqli_query($conn, $sql2);
+        $resultadoConsultas = mysqli_fetch_assoc($result2);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -181,24 +197,38 @@ $consultas = [];
                         <span><?php echo htmlspecialchars($row['status']);?></span>
                     </div>
                     <div class="topRight">
-                        <h3>Data: <?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></h3>
-                        <span class="horaConsulta">Hora: <?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta'])));?></span>
+                        <h3 class="dataConsulta"><?php echo htmlspecialchars(date("d/m/Y", strtotime($row['data_consulta']))); ?></h3>
+                        <span class="horaConsulta"><?php echo htmlspecialchars(date('H:i', strtotime($row['hora_consulta'])));?></span>
                         <span class="docName">Médico: Dr(a) <?php echo htmlspecialchars($row['nome_medico']); ?></span>
                         <div class="gapBetween">
                             <i class="bi bi-clipboard2-pulse"></i>
-                            <span><?php echo htmlspecialchars($row['id_consulta']); ?></span>
+                            <span><?php echo htmlspecialchars($row['especialidade']); ?></span>
                         </div>
                         <hr>
                     </div>
                     
                     <div class="bottomRight spaceBetween">
-                        <a href="#" class="hide">Compartilhar</a>
-                        <form action="../chat.php" method="post">
-                            <input type="hidden" name="idMedico"  value="<?php echo htmlspecialchars($row['id_medico']); ?>">
-                            <button type="submit" class="mostrarResultadosBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
+                        <a href="../geradorPdf.php?id_consulta=<?= $row['id_consulta'] ?>" target="_blank" class="compartilharLink hide">Baixar PDF do Chat</a>
+                        <form action="" method="post">
+                            <input type="hidden" name="mostrarResultados" value="<?php echo $row['id_consulta']?>">
+                            <input type="hidden" name="idMedico" value="<?php echo $row['id_medico']?>">
+                            <button type="submit" class="mostrarResultadosBtn hide">
                                 Mostrar Resultados
                             </button>
                         </form>
+                        <form action="../chat.php" method="post">
+                            
+                            <input type="hidden" name="nomeMedico"  value="<?php echo htmlspecialchars($row['nome_medico']); ?>">
+
+                            <input type="hidden" name="idMedico"  value="<?php echo htmlspecialchars($row['id_medico']); ?>">
+                            <button type="submit" class="irParaConsultaBtn" name="consulta" value="<?php echo htmlspecialchars($row['id_consulta']); ?>">
+                                Ir para consulta
+                            </button>
+                        </form>
+                       
+
+
+
                     </div>
 
                 </div>
@@ -206,8 +236,23 @@ $consultas = [];
             <?php endforeach; ?>
             </div>
 
-            <div class="right centralizado">
+            <div class="right">
+                <?php if(isset($resultadoConsultas)):?>
+                    <div class="resultadoConsultasContainer">
+                        <p><b>Data da consulta:</b> <?php echo htmlspecialchars(date("d/m/Y", strtotime($resultadoConsultas['data_consulta'])))  ?>.</p>
+                        
+                        <p><b>Hora da consulta:</b> <?php echo htmlspecialchars(date("H:i", strtotime($resultadoConsultas['hora_consulta'] )))?>.</p>
+                        
+                        <p><b>Nome do médico:</b> Dr(a). <?php echo htmlspecialchars($resultadoConsultas['nome_medico'])?>.</p>
+                        
+                        <p><b>Especialidade:</b> <?php echo htmlspecialchars($resultadoConsultas['especialidade'])?>.</p>
+
+                        <h2>Chat da consulta:</h2>
+                        <iframe class="iframe" src="../geradorPdf.php?id_consulta=<?= $resultadoConsultas['id_consulta'] ?>" target="_blank" frameborder="0"></iframe>
+                    </div>
+                <?php else:?>
                 <p>Nenhuma consulta selecionada</p>
+                <?php endif; ?>
             </div>
 
         </section>

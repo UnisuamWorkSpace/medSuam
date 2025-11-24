@@ -1,0 +1,225 @@
+\documentclass[
+    12pt,
+    openright,
+    oneside,
+    a4paper,
+    chapter=TITLE,
+    brazil
+]{abntex2}
+
+% =============================
+% Pacotes básicos
+% =============================
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{amsmath, amsfonts, amssymb}
+
+% Configuração de hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=black,
+    pdftitle={Relatório Final do Projeto MedSuam},
+    pdfauthor={Gabriel Ferreira Dantas; Igor da Silva Sant'anna; Ronivaldo Domingues de Andrade}
+}
+
+% =============================
+% Informações do relatório
+% =============================
+\titulo{Relatório Final do Projeto -- MedSuam}
+\autor{
+Gabriel Ferreira Dantas \\
+Igor da Silva Sant\textquoteright anna \\
+Ronivaldo Domingues de Andrade
+}
+\local{Rio de Janeiro -- RJ}
+\data{2025}
+\instituicao{
+Centro Universitário Augusto Motta -- UNISUAM \\
+Curso Superior de Análise e Desenvolvimento de Sistemas \\
+Projeto de Desenvolvimento em Back-End
+}
+\tipotrabalho{Relatório Técnico}
+
+\hypersetup{hidelinks}
+
+\begin{document}
+
+\imprimircapa
+\imprimirfolhaderosto*
+
+\tableofcontents*
+
+\pagestyle{abntheadings}
+
+% =====================================================================
+\chapter{Introdução}
+%\addcontentsline{toc}{chapter}{Introdução}
+
+O presente relatório tem como finalidade documentar, de forma clara e estruturada, o desenvolvimento das quatro sprints que compõem o projeto realizado na disciplina de Projeto de Back-end II. Cada sprint teve como objetivo a construção progressiva de funcionalidades essenciais para um sistema seguro, escalável e alinhado às boas práticas de desenvolvimento.
+
+Na \textbf{Sprint 1}, foi estabelecida a base do sistema, incluindo a modelagem do banco de dados, o cadastro de usuários, o login e as primeiras validações de segurança. Essa etapa preparou a infraestrutura fundamental sobre a qual as demais funcionalidades foram construídas.
+
+A \textbf{Sprint 2} concentrou-se no desenvolvimento de um módulo administrativo completo. Nessa fase, foram implementados níveis hierárquicos de permissão (Admin e Super Admin), além de um CRUD robusto para gerenciamento de usuários, garantindo controle e segurança sobre operações administrativas.
+
+A \textbf{Sprint 3} ampliou significativamente a segurança do sistema, introduzindo a autenticação em dois fatores (2FA), desenvolvida por meio da integração com a API SendGrid. Essa funcionalidade adicionou uma camada verificadora adicional ao processo de login, reforçando a confiabilidade e proteção dos acessos.
+
+Por fim, a \textbf{Sprint 4} abordou o fluxo completo de redefinição de senha, envolvendo validações front-end, envio de códigos de verificação, tratamento seguro de sessões e atualização criptografada de credenciais.
+
+Assim, este relatório apresenta detalhadamente os objetivos, as atividades realizadas, as funcionalidades implementadas e os resultados alcançados em cada sprint, seguido de uma conclusão que sintetiza os aprendizados e a evolução técnica adquirida durante o desenvolvimento do projeto.
+
+
+% =====================================================================
+\chapter{Sprint 1 – Estrutura Inicial do Sistema de Autenticação}
+
+\section{Objetivos}
+A Sprint 1 teve como objetivo construir a base do sistema de autenticação, incluindo o cadastro de usuários (pacientes e médicos), login funcional e preparação da estrutura necessária para recuperação de senha.
+
+\section{Atividades Executadas}
+Durante esta etapa foram utilizados PHP, MySQL, HTML, CSS, JavaScript e o banco \texttt{bd\_medsuam.sql}. Seguindo orientações da disciplina, foram aplicadas boas práticas como sanitização de dados, verificação de e-mails duplicados e o uso da função \texttt{password\_hash()} para proteção das senhas.
+
+A primeira tarefa consistiu na criação e organização do banco de dados. O script inicial criou tabelas como: \texttt{paciente}, \texttt{medico}, \texttt{telefone}, \texttt{endereco}, \texttt{rg}, \texttt{especialidade}, entre outras que se fizeram necessárias. A conexão com o banco foi centralizada no arquivo \texttt{dbMedsuam.php}.
+
+\subsection{Cadastro de Pacientes}
+O cadastro de pacientes sanitiza os dados com \texttt{mysqli\_real\_escape\_string()}, valida campos obrigatórios e bloqueia o registro caso o e-mail já exista nas tabelas de pacientes ou médicos. Após validação, o sistema insere os dados do paciente e registra endereço, telefone e RG vinculados ao seu ID.
+
+\subsection{Cadastro de Médicos}
+O cadastro de médicos segue lógica semelhante, com criptografia de senha e registro de telefone e especialidade após validações.
+
+\subsection{Login}
+O login foi implementado no arquivo \texttt{userpage.php}. As credenciais são verificadas no banco, e uma sessão segura é iniciada em caso de sucesso, permitindo acesso a áreas internas restritas.
+
+\section{Resultados Alcançados}
+A Sprint 1 permitiu criar uma base sólida para o restante do sistema. O grupo adquiriu experiência prática com criação de CRUD básico, organização de dados no banco, integração entre front-end e back-end, sanitização de dados, proteção de senhas e controle de sessões.
+
+% =====================================================================
+\chapter{Sprint 2 – Desenvolvimento do CRUD Administrativo}
+
+\section{Objetivos}
+A Sprint 2 teve como objetivo desenvolver um módulo administrativo completo, permitindo que usuários com privilégios especiais gerenciassem os demais usuários do sistema.
+
+\section{Atividades Executadas}
+\begin{itemize}
+	\item Criação do diretório \texttt{admin/} na raiz do projeto para conter os códigos do Admin, fazendo com que o acesso ao painel admin seja pela rota \textit{localhost/medsuam/admin} em caso de uso local.
+    \item Implementação do CRUD completo (Criar, Ler, Atualizar e Deletar).
+    \item Criação dos níveis de permissão: \textit{Admin} e \textit{Super Admin}.
+    \item Desenvolvimento dos controles de acesso para cada tipo de administrador.
+    \item Implementação da lógica de bloqueio para impedir que administradores comuns gerenciem outros admins.
+\end{itemize}
+
+\section{Funcionalidades Implementadas}
+\begin{itemize}
+    \item Cadastro, listagem, edição e exclusão de usuários.
+    \item Sistema de hierarquia:
+    \begin{itemize}
+        \item \textbf{Super Admin}: acesso total.
+        \item \textbf{Admin}: acesso total, exceto sobre perfis administrativos.
+    \end{itemize}
+    \item[\textbf{OBS.:}] Não foi implementado um script específico para inserção do primeiro usuário Super Admin, nesse caso foi criado o banco de dados já com ele inserido ou inserido manualmente no PHPmyAdmin quando se necessitava de testes, a criação desse script foi deixada para uma futura implementação real do sistema.
+\end{itemize}
+
+\section{Resultados Alcançados}
+O módulo administrativo foi concluído com sucesso, oferecendo controle interno robusto, seguro e totalmente funcional.
+
+% =====================================================================
+\chapter{Sprint 3 – Autenticação de Dois Fatores (2FA)}
+
+\section{Objetivos}
+Implementar um sistema de autenticação em dois fatores para aumentar a segurança no processo de login.
+
+\section{Atividades Executadas}
+\begin{itemize}
+    \item Integração da API SendGrid para envio de códigos de verificação. A escolha do SendGrid se dá pela facilidade de implementação.
+    \item Criação da página de verificação pós-login.
+    \item Implementação do fluxo completo de geração, envio e validação do código.
+\end{itemize}
+
+\section{Funcionalidades Implementadas}
+\textbf{OBS.:} Nessa parte do projeto, foi usada duas bibliotecas prontas, que foram instaladas via \texttt{composer}, são elas: a \texttt{Dotenv\textbackslash Dotenv} e \texttt{SendGrid\textbackslash Mail\textbackslash Mail}, normalmente em casos assim o arquivo \texttt{.gitignore} deve excluir do versionamento o diretório \texttt{vendor/} por questões de tamanho do projeto, porém nesse caso não o fizemos por conta de falta de familiaridade e compatibilidade do uso da ferramenta \texttt{composer}.
+\begin{itemize}
+    \item Envio automático de um código de 6 dígitos para o email informado pelo usuário.
+    
+    		Em \texttt{utilsMail.php} A função \texttt{generate2FACode()} gera um código de 6 dígitos e o salva em uma variável da sessão, ou seja, o usuário já deve ter sido aprovado no processo de login ou cadastro e uma sessão para ele já deve ter sido iniciada.
+    		
+    		A função \texttt{send2FACode()}, recebe o parâmetro obrigatório \textit{\$email} e é responsável por enviar o e-mail com o código de 6 dígitos gerado pela função anterior, ela recupera o código atravéz da sessão aberta para o usuário, recupera a chave da API SendGrid do arquivo \textit{.env} usando o \textit{Dotenv} e cria um corpo básico de e-mail com assunto e corpo e o envia ao e-mail passado no parâmetro.
+    		
+    		A função \texttt{verify2FACode()} recebe o parâmentro obrigatório \textit{\$inputCode} que é o código digitado pelo usuário, em seu fluxo, ela recupera da variável da sessão o código original e os compara retornando \textit{true} ou \textit{false} ela faz outras coisas como controlar o número máximo de tentativas permitidas e envia junto mensagens caso esse tempo seja ultrapassado. A fim de facilitar nosso trabalho e testes foi adicionado a essa função um código Bypass --- 000000 para evitar que sempre necessite aguardar o e-mail. Importante destacar que tal recurso é utilizado exclusivamente para fins de teste, não sendo aplicado em ambiente de produção.
+    \item Verificação obrigatória antes de acessar o perfil.
+    \item Bloqueio de tentativas inválidas por tentativas e por tempo de expiração do código enviado.
+\end{itemize}
+
+\section{Resultados Alcançados}
+O 2FA foi integrado com sucesso ao sistema, fortalecendo a segurança do processo de autenticação e garantindo maior confiabilidade para os usuários e muito aprendizado no desenvolvimento.
+
+% =====================================================================
+\chapter{Sprint 4 – Reset de Senha}
+
+\section{Objetivos}
+A Sprint 4 teve como objetivo permitir que os usuários redefinissem sua senha de forma segura, utilizando validações JavaScript e envio de códigos pelo SendGrid.
+
+\section{Atividades Executadas}
+A funcionalidade foi desenvolvida com PHP, HTML, CSS, JavaScript, MySQL e SendGrid. Foram criadas quatro páginas PHP:
+
+\subsection{\texttt{login.php}}
+Inclui o link “Esqueceu sua senha?”, que redireciona o usuário para \texttt{emailCollect.php}.
+
+\subsection{\texttt{emailCollect.php}}
+Nesta página o usuário informa seu e-mail.  
+Há validação em JavaScript e, no back-end, sanitização e verificação no banco de dados. Caso seja encontrado, sessões são criadas e o usuário é redirecionado.
+
+\subsection{\texttt{autenticacao.php}}
+A API SendGrid envia um código de seis dígitos. O código inserido pelo usuário é validado. Se correto, segue para \texttt{reset.php}.
+
+\subsection{\texttt{reset.php}}
+O usuário insere sua nova senha duas vezes.  
+Validações em JavaScript garantem que as senhas coincidam.  
+No back-end, o sistema localiza o usuário e atualiza a nova senha já criptografada com \texttt{password\_hash()}.
+
+\section{Resultados Alcançados}
+A Sprint 4 permitiu ao grupo aprender validações em JavaScript, sanitização segura, uso de APIs externas, manipulação de sessões e atualização de senhas com boas práticas de segurança.
+
+% =====================================================================
+\chapter{Conclusão}
+%\addcontentsline{toc}{chapter}{Conclusão}
+
+O desenvolvimento das quatro sprints resultou em um sistema funcional, seguro e estruturado, que evoluiu progressivamente em complexidade e maturidade. Na Sprint 1, foi construída a base do sistema de autenticação, incluindo cadastro, login e organização do banco de dados. Na Sprint 2, implementou-se um CRUD administrativo robusto, com hierarquia de permissões. A Sprint 3 ampliou a segurança com autenticação de dois fatores, integrando envio de códigos por e-mail. Por fim, a Sprint 4 consolidou um processo completo e seguro de redefinição de senha.
+
+O grupo adquiriu experiência prática em desenvolvimento back-end, integração com banco de dados, segurança da informação, uso de APIs externas, boas práticas de organização e programação, validações, controle de sessões e arquitetura do sistema. O conjunto das sprints resultou em um sistema coerente, estável e alinhado com os objetivos da disciplina.
+
+% =====================================================================
+
+\appendix
+
+\chapter{Links dos Repositórios e Materiais do Projeto}
+
+Este apêndice reúne os principais links utilizados no desenvolvimento do sistema, incluindo o repositório responsável pelo código-fonte das quatro sprints e o quadro do Trello, onde foram organizadas as atividades, etapas e responsabilidades do grupo ao longo do projeto.
+
+\section{Repositório MedSuam no GitHub}
+
+A seguir, encontra-se o repositório que armazena o código produzido no decorrer das fases do desenvolvimento:
+
+\begin{itemize}
+    \item \textbf{Repositório Geral do Projeto:} \\
+    \url{https://github.com/UnisuamWorkSpace/medSuam.git}
+\end{itemize}
+
+\section{Quadro do Trello}
+
+O quadro do Trello foi utilizado para organização interna, registro das atividades, acompanhamento das tarefas por sprint e controle do fluxo de desenvolvimento. Seu acesso está disponível abaixo:
+
+\begin{itemize}
+    \item \textbf{Trello – Organização das Sprints:} \\
+    \url{https://trello.com/b/ZZraZxb7/medsuam}
+\end{itemize}
+
+% =====================================================================
+\end{document}
