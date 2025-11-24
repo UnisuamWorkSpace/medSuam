@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+}
+
+.header {
+    background: #4a90e2;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.main-content {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.valor-glicemia {
+    margin-bottom: 30px;
+}
+
+.valor {
+    font-size: 72px;
+    font-weight: 700;
+    color: #2c3e50;
+    display: block;
+    line-height: 1;
+}
+
+.unidade {
+    font-size: 18px;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.separador {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #bdc3c7, transparent);
+    margin: 30px 0;
+}
+
+.resultado {
+    margin-bottom: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.resultado.otimo {
+    background: #e8f5e8;
+    border: 2px solid #27ae60;
+}
+
+.resultado.baixa {
+    background: #fff3cd;
+    border: 2px solid #f39c12;
+}
+
+.resultado.pre-diabetes {
+    background: #fff3cd;
+    border: 2px solid #f39c12;
+}
+
+.resultado.diabetes {
+    background: #fde8e8;
+    border: 2px solid #e74c3c;
+}
+
+.status {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.resultado.otimo .status {
+    color: #27ae60;
+}
+
+.resultado.baixa .status {
+    color: #f39c12;
+}
+
+.resultado.pre-diabetes .status {
+    color: #f39c12;
+}
+
+.resultado.diabetes .status {
+    color: #e74c3c;
+}
+
+.mensagem {
+    font-size: 16px;
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.info-mediacao {
+    margin-bottom: 30px;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn-continuar, .btn-nova-mediacao {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-continuar {
+    background: #4a90e2;
+    color: white;
+}
+
+.btn-continuar:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+}
+
+.btn-nova-mediacao {
+    background: transparent;
+    color: #4a90e2;
+    border: 2px solid #4a90e2;
+}
+
+.btn-nova-mediacao:hover {
+    background: #4a90e2;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.erro {
+    background: #fde8e8;
+    color: #e74c3c;
+    padding: 15px;
+    margin: 20px;
+    border-radius: 8px;
+    border: 1px solid #e74c3c;
+    text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .container {
+        margin: 10px;
+        border-radius: 15px;
+    }
+    
+    .header {
+        padding: 25px 15px;
+    }
+    
+    .main-content {
+        padding: 30px 20px;
+    }
+    
+    .valor {
+        font-size: 60px;
+    }
+    
+    .status {
+        font-size: 20px;
+    }
+}
