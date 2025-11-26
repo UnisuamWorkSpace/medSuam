@@ -3,10 +3,11 @@ session_start();
 require_once 'dbMedsuam.php'; // Usar a mesma conexão do dbMedsuam.php
 
 // Verificar se o usuário está logado (paciente)
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['logged_in'])) {
     header('Location: login.php');
     exit;
 }
+
 
 $id_paciente = $_SESSION['id'];
 
@@ -117,7 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Glicemia</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <link rel="stylesheet" href="./css/registrar.css">
+    
 </head>
 <body>
     <div class="container">
@@ -180,6 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <button <a hrer="analiseGlicemia.php" type="submit" class="btn-salvar">Salvar</button>
+            <div class="voltarLinkContainer">
+                <a href="./assisMedico.php" class="linkVoltar"><i class="bi bi-caret-left-fill"></i> Voltar</a>
+            </div>
         </form>
     </div>
 

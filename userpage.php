@@ -1,6 +1,7 @@
 <?php
 
     session_start();
+    require 'dbMedsuam.php';
 
     $parts = explode(" ", $_SESSION['paciente']); // splits by space
     $primeiroNome = $parts[0];           // take the first part
@@ -8,6 +9,13 @@
     if(!isset($_SESSION['logged_in'])) {
         header('location: login.php');
         exit;
+    }
+
+    $sql = "SELECT * FROM assistente_medico WHERE id_paciente = {$_SESSION['id']} LIMIT 1";
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) === 1) {
+        $_SESSION['perfilGamificado'] = true;
     }
 
 ?>
@@ -104,12 +112,21 @@
                 <span>Termos</span>
                 </a>
             </li>
+            <?php if(isset($_SESSION['perfilGamificado']) && $_SESSION['perfilGamificado']):?>
             <li>
-                <label id="acessibilidadeLabel" class="linkPage" for="acessibilidade">
+                <a href="./assisMedico.php" id="acessibilidadeLabel" class="linkPage" for="acessibilidade">
+                    <i class="fas fa-robot"></i>
+                    Plano-gamificado
+                </a>
+            </li>
+            <?php endif;?>
+            <li> 
+                <label id="acessefibilidadeLabel" class="linkPage" for="acessibilidade">
                     <i class="fa fa-universal-access"></i>
                     <span>Acessibilidade</span>
                 </label>
             </li>
+            
             <li class="sairContainer">
                 <a id="sairLink" href="./sair.php">
                     <i class="fas fa-door-open"></i>

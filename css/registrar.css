@@ -156,3 +156,23 @@ label {
     text-align: center;
     border: 1px solid #f5c6cb;
 }
+
+.voltarLinkContainer {
+    display:flex;
+    justify-content: center;
+    
+}
+
+.linkVoltar {
+    text-decoration: none;
+    margin-top: 15px;
+    color: black;
+    transition: 600ms ease-in-out;
+    transform: scale(1);
+    cursor: pointer;
+}
+
+.linkVoltar:hover {
+    color: rgba(92, 184, 150, 0.957);
+    transform: scale(1.1);
+}

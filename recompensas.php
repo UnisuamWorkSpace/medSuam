@@ -192,9 +192,15 @@ list($tipoMensagem, $textoMensagem) = $mensagemResgate ? explode('|', $mensagemR
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Recompensas</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./css/recompensas.css">
 </head>
 <body>
+    <div class="voltarLinkContainer">
+        <a href="./assisMedico.php" class="linkVoltar"><i class="bi bi-caret-left-fill"></i> Voltar</a>
+    </div>
+
     <div class="container">
         <header class="header">
             <h1>Cupons disponíveis para troca</h1>

@@ -181,3 +181,57 @@ h1 {
         height: 220px;
     }
 }
+
+
+.paginaInicialLink {
+  display: inline-block;
+  background: #e2e8f0;          /* soft gray-blue */
+  border: 2px solid #cbd5e1;    /* light border */
+  color: #1e293b;               /* dark slate text */
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-top: 15px;
+  text-decoration: none;
+}
+
+.paginaInicialLink:hover {
+  background: #f8fafc;          /* slightly lighter */
+  color: #0f172a;               /* darker text */
+  border-color: #94a3b8;        /* subtle blue-gray */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+body {
+    padding-bottom: 80px;
+}
+
+
+nav {
+    background-color: whitesmoke;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 10px 0;
+}
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap:20px;
+}
+nav a {
+    text-decoration: none;
+}
+
+.centralized {
+    text-align: center;
+}

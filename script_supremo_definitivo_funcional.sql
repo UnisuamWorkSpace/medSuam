@@ -330,6 +330,12 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.adm (
   PRIMARY KEY (id_adm))
 ENGINE = InnoDB;
 
+LOCK TABLES `adm` WRITE;
+/*!40000 ALTER TABLE `adm` DISABLE KEYS */;
+INSERT INTO `adm` VALUES (1,'SUPER01','$2a$12$Odc6bp3kGVod5dyjzGjatuL36brYzWmCNNfR54utoHLSy167H2ou6','silva.igor.014@gmail.com','123.456.789-00','1990-01-01','super','2025-10-22 18:02:33','2025-11-03 02:44:15'),(4,'ADM01','$2y$10$pCOcANSM.Ela/hx/f/kideIZaL.CG3P9XcshqW2G8MO/FX03zKUzS','ADM01@gmail.com','14785236912','1996-01-08','adm','2025-10-27 14:17:22','2025-11-02 13:10:00');
+/*!40000 ALTER TABLE `adm` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 -- -----------------------------------------------------
 -- Table bd_medsuam.atualizacao_adm

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once 'dbMedsuam.php'; // Arquivo de conexão com o banco
@@ -8,10 +9,10 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-if (isset($_SESSION['medido'])) {
+/* if (isset($_SESSION['medido'])) {
     header ('location: assisMedico.php');
     exit();
-}
+} */
 
 $id_paciente = $_SESSION['id'];
 
@@ -226,7 +227,7 @@ if ($status === "Excelente" || $status === "Boa") {
                 </div>
                 
                 <div class="acoes">
-                    <a href="userpage.php" class="btn-continuar">Continuar</a>
+                    <a href="assisMedico.php" class="btn-continuar">Continuar</a>
                 </div>
             <?php endif; ?>
         </main>

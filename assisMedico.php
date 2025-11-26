@@ -1,8 +1,9 @@
 <?php
 session_start();
 
+
 // Verificar se o usuário está logado
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['logged_in'])) {
     header("Location: login.php");
     exit();
 }
@@ -128,6 +129,13 @@ $nome_paciente = $paciente ? $paciente['nome_paciente'] : "Paciente";
 </head>
 
 <body>
+    <nav>
+        <ul>
+            <li><a class="paginaInicialLink" href="./recompensas.php">Resgatar cupons</a></li>
+            <li><a class="paginaInicialLink" href="./userpage.php">Voltar para página Inicial</a></li>         
+            <li><a class="paginaInicialLink" href="./meusCupons.php">Seus cupons</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <header>
             <h1>MedSuam</h1>
@@ -167,12 +175,13 @@ $nome_paciente = $paciente ? $paciente['nome_paciente'] : "Paciente";
             <!-- <button class="add-button" onclick="window.location.href='registrarGlicemia.php'">
                 + Adicionar Glicemia
             </button> -->
+            
             <?php if ($dia != $dia_atual): ?>
                 <button class="add-button" onclick="window.location.href='registrarGlicemia.php'">
                 + Adicionar Glicemia
                 </button>
             <?php else: ?>
-                <p>Sua glicemia já foi cadastrada hoje!</p>
+                <p class="centralized">Sua glicemia já foi cadastrada hoje!</p>
             <?php endif; ?>
 
         </main>

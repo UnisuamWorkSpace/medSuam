@@ -130,9 +130,6 @@ if (mysqli_num_rows($result) === 0) {
                 </label>
                 </div>
             </li>
-            <li>
-                <span>Olá <?php echo $primeiroNome . ' !'?> </span>
-            </li>
             <li class="showMenuContainer">
                 <label for="showMenu">
                     <i class="fas fa-angle-double-up"></i> 
@@ -142,41 +139,6 @@ if (mysqli_num_rows($result) === 0) {
                 <a href="#" class="linkPage currentPage">
                     <i class="fa-solid fa-house"></i>
                     <span>Início</span>
-                </a>
-            </li>
-            <li>
-                <a href="./pages/exames.html" class="linkPage">
-                    <i class="fa-solid fa-flask"></i>
-                    <span>Exames</span>
-                </a>
-            </li>
-            <li>
-                <a href="./pages/vacinas.html" class="linkPage">
-                    <i class="fas fa-syringe"></i>
-                    <span>Vacinas</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="./pages/consultas.html" class="linkPage">
-                    <i class="fa fa-stethoscope"></i>
-                    <span>Consultas</span>
-                </a>
-            </li>
-          
-            <li class="geralSpanContainer">
-                <span class="geralSpan">Geral</span>
-            </li>
-            <li>
-                <a href="./pages/dadosCadastrais.html" class="linkPage">
-                    <i class="fas fa-gear"></i>
-                    <span>Dados Cadastrais</span>
-                </a>
-            </li>
-            <li>
-                <a href="./pages/termos.html" class="linkPage">
-                <i class="fas fa-book"></i>
-                <span>Termos</span>
                 </a>
             </li>
             <li>

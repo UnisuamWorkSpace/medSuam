@@ -69,7 +69,7 @@ aside ul li i {
 }
 
 /* ==== LINKS & LABELS ==== */
-aside ul li a,
+aside ul li button,
 aside ul li label {
     white-space: nowrap;
     display: flex;
@@ -125,9 +125,9 @@ aside ul li label {
 }
 
 /* ==== RADIO HIDING (used inside sidebar) ==== */
-input[type=radio] {
+/* input[type=radio] {
     display: none;
-}
+} */
 
 input[type=radio]:checked ~ label {
     color: var(--padrao);
@@ -284,4 +284,78 @@ main {
     color: var(--cianoClaro);
     border: 2px solid var(--cianoClaro);
     transform: scale(1.1);
+}
+
+.planoGamificadoBtn {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 20px;
+}
+
+.planoGamificadoForm {
+    position: fixed;
+    padding: 40px 40px;
+    background-color: white;
+    bottom: 200%;
+    
+    left: 50%;
+    transform: translate(-50%);
+    border: 3px solid var(--cianoClaro);
+    border-radius: 25px;
+    color: black;
+    text-align: center;
+    align-content: center;
+    transition: 600ms ease-in-out;
+}
+
+.planoGamificadoForm.open {
+    bottom: 50%;
+}
+
+
+.agendamentoInput {
+    cursor:pointer;
+}
+
+.prontoBtn {
+  background-color: var(--azulClaro);
+  border: 2px solid whitesmoke;
+  color: whitesmoke;
+  font-weight: 600;
+  font-size: 17px;
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 15px;
+}
+
+.prontoBtn:hover {
+  background-color: #ffffff;
+  color: var(--azulClaro);
+  border-color: var(--azulClaro);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+.closeForm {
+    float: right;
+    border: none;
+    color: rgb(199, 48, 48);
+    
+    font-size: 30px;
+    font-weight: bold;
+    background-color: white;
+    transition: 600ms ease-in-out;
+    transform: scale(1.2);
+    
+    cursor:pointer;
+}
+
+.closeForm:hover {
+    transform: scale(1);
+    color: red;
 }
