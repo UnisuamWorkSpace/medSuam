@@ -83,7 +83,7 @@
             </li>
             
             <li>
-                <a href="./pages/consultas.html" class="linkPage">
+                <a href="./pages/consultas.php" class="linkPage">
                     <i class="fa fa-stethoscope"></i>
                     <span>Consultas</span>
                 </a>

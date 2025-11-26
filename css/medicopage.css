@@ -1329,6 +1329,11 @@ button.dadosCadastraisContainer .dadosCadastraisContent i {
     transform: scale(1.1);
 }
 
+.finalizadoSpan {
+    background-color: rgb(109, 185, 109);
+    color: white;
+}
+
 @media(max-width: 980px) {
     .mainCentralized {
         display:block;

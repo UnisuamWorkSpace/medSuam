@@ -422,6 +422,8 @@ $('.resultadosConsultas').each(function() {
 
     let status = $(this).find('.status').text().trim().toLowerCase();
     let irParaConsulta = $(this).find('.irParaConsultaForm');
+    let statusBox = $(this).find('.status');
+    let editConsulta = $(this).find('.editConsultaStatusBtn');
 
     if (status === "confirmado") {
 
@@ -450,11 +452,10 @@ $('.resultadosConsultas').each(function() {
     if (diff <= 10 && dataAgora === dataConsulta) { 
       irParaConsulta.removeClass('hide');
     }
-  }/* else if (status === "finalizado") {
+  }else if (status === "finalizado") {
     statusBox.addClass('finalizadoSpan');
-    compartilhar.removeClass('hide');
-    mostrarResultados.removeClass('hide');
-  } */
+    editConsulta.addClass('hide');
+  }
 
     
 });

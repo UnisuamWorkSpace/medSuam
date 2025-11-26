@@ -25,7 +25,7 @@
             $sql = "INSERT INTO consulta (id_paciente, id_medico, data_consulta, hora_consulta, status) VALUES('{$_SESSION['id']}', '$idMedico', '$dataConsulta', '$horaConsulta', 'aguardando')";
             if(mysqli_query($conn, $sql)) {
                 echo "telefone INSERTED";
-                header('location: consultas.html');
+                header('location: consultas.php');
                 exit;
             }else {
                 echo 'telefone deu erro';
@@ -153,29 +153,10 @@
                 <input type="hidden" name="idMedico" value="<?php echo htmlspecialchars($idMedico); ?>">
                 <input class="dataAgendamento" type="date" name="dataAgendamento" id="hoje" readonly>
                 <div class="horarioAgendamento">
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="11:00" required>
-                        11:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="14:00" required>
-                        14:00
-                    </label>  
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="17:00" required>
-                        17:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="20:00" required>
-                        20:00
-                    </label>
-                    <label>
-                        <input class="agendamentoInput" type="radio" name="agendamento" value="22:00" required>
-                        22:00
-                    </label>
-
+            
+                    <input type="text" name="agendamento" id="agendamento" requried>
                     <input class="agendarConsultaBtn" type="submit" name="agendarConsulta" value="Agendar consulta">
-                </div>         
+                </div>          
             </form>
             <form class="dataAgendamentoContainer" action="" method="post">
                 <input type="hidden" name="idMedico" value="<?php echo htmlspecialchars($idMedico); ?>">
@@ -209,10 +190,28 @@
                 <input type="hidden" name="idMedico" value="<?php echo htmlspecialchars($idMedico); ?>">
                 <input class="dataAgendamento" type="date" name="dataAgendamento" id="depoisDeAmanha" readonly>
                 <div class="horarioAgendamento">
-            
-                    <input type="text" name="agendamento" id="agendamento" requried>
+                    <label>
+                        <input class="agendamentoInput" type="radio" name="agendamento" value="11:00" required>
+                        11:00
+                    </label>
+                    <label>
+                        <input class="agendamentoInput" type="radio" name="agendamento" value="14:00" required>
+                        14:00
+                    </label>  
+                    <label>
+                        <input class="agendamentoInput" type="radio" name="agendamento" value="17:00" required>
+                        17:00
+                    </label>
+                    <label>
+                        <input class="agendamentoInput" type="radio" name="agendamento" value="20:00" required>
+                        20:00
+                    </label>
+                    <label>
+                        <input class="agendamentoInput" type="radio" name="agendamento" value="22:00" required>
+                        22:00
+                    </label>
                     <input class="agendarConsultaBtn" type="submit" name="agendarConsulta" value="Agendar consulta">
-                </div>         
+                </div>       
             </div>
             
             
