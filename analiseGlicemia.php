@@ -8,6 +8,11 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
+if (isset($_SESSION['medido'])) {
+    header ('location: assisMedico.php');
+    exit();
+}
+
 $id_paciente = $_SESSION['id'];
 
 // Buscar a última medição de glicemia do paciente
@@ -120,7 +125,7 @@ if ($tipo_medicao === "jejum" || $tipo_medicao === "pre_refeicao") {
         $mensagem = "Seu nível pós-refeição está excelente.";
         $classe_status = "excelente";
     } elseif ($valor_glicemia >= 140 && $valor_glicemia <= 179) {
-        $status = "Boa";
+        $status = "Boa"; 
         $pontuacao = 10;
         $mensagem = "O nível está bom, mas é bom monitorar.";
         $classe_status = "boa";
@@ -140,7 +145,7 @@ if ($tipo_medicao === "jejum" || $tipo_medicao === "pre_refeicao") {
     $classe_status = "erro";
 }
 
-if ($status != "Erro") {
+if ($status === "Excelente" || $status === "Boa") {
     $sql = "
         SELECT pontos FROM perfil_gamificado WHERE id_paciente = ? 
     ";
@@ -150,6 +155,27 @@ if ($status != "Erro") {
     $stmt->execute();
     $result = $stmt->get_result();
     $medicao = $result->fetch_assoc();
+    if ($medicao === null) { 
+       $sql = "
+        INSERT INTO perfil_gamificado (id_paciente, pontos) VALUES ($id_paciente, $pontuacao)
+    ";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $_SESSION['medido'] = true;
+    } else {
+        $pontosAtuais = $medicao ['pontos'];
+        $pontuacaoNova = $pontosAtuais + $pontuacao; 
+
+        
+        $sql = "
+        UPDATE perfil_gamificado SET pontos = $pontuacaoNova 
+    ";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $_SESSION['medido'] = true;
+    }    
 } 
 
 

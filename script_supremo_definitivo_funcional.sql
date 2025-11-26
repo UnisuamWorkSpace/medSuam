@@ -189,18 +189,18 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS bd_medsuam.perfil_gamificado (
   id_perfil INT NOT NULL AUTO_INCREMENT,
-  id_condicao INT NOT NULL,
   id_paciente INT NOT NULL,
   pontos INT NOT NULL,
   medalhas INT NOT NULL,
   nivel_atual INT NOT NULL,
-  PRIMARY KEY (id_perfil, id_condicao, id_paciente),
-  INDEX fk_PERFIL_GAMIFICADO_PACIENTE_CONDICAO1_idx (id_paciente ASC, id_condicao ASC) ,
-  CONSTRAINT fk_PERFIL_GAMIFICADO_PACIENTE_CONDICAO1
-    FOREIGN KEY (id_paciente , id_condicao)
-    REFERENCES bd_medsuam.paciente_condicao (id_paciente , id_condicao)
+  PRIMARY KEY (id_perfil, id_paciente),
+  INDEX fk_PERFIL_GAMIFICADO_PACIENTE_idx (id_paciente ASC),
+  CONSTRAINT fk_PERFIL_GAMIFICADO_PACIENTE
+    FOREIGN KEY (id_paciente)
+    REFERENCES bd_medsuam.paciente (id_paciente)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 
@@ -211,17 +211,16 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.missao_gamificada (
   id_missao INT NOT NULL AUTO_INCREMENT,
   id_perfil INT NOT NULL,
   id_paciente INT NOT NULL,
-  id_condicao INT NOT NULL,
   id_monitoramento INT NOT NULL,
   descricao VARCHAR(255) NOT NULL,
   status VARCHAR(255) NOT NULL,
   pontos INT NOT NULL,
-  PRIMARY KEY (id_missao, id_perfil, id_condicao, id_paciente, id_monitoramento),
-  INDEX fk_MISSAO_GAMIFICADA_PERFIL_GAMIFICADO1_idx (id_perfil ASC, id_condicao ASC, id_paciente ASC) ,
-  INDEX fk_MISSAO_GAMIFICADA_MEDICO_FANTASMA1_idx (id_monitoramento ASC) ,
+  PRIMARY KEY (id_missao, id_perfil, id_paciente, id_monitoramento),
+  INDEX fk_MISSAO_GAMIFICADA_PERFIL_GAMIFICADO1_idx (id_perfil ASC, id_paciente ASC),
+  INDEX fk_MISSAO_GAMIFICADA_MEDICO_FANTASMA1_idx (id_monitoramento ASC),
   CONSTRAINT fk_MISSAO_GAMIFICADA_PERFIL_GAMIFICADO1
-    FOREIGN KEY (id_perfil , id_condicao , id_paciente)
-    REFERENCES bd_medsuam.perfil_gamificado (id_perfil , id_condicao , id_paciente)
+    FOREIGN KEY (id_perfil , id_paciente)
+    REFERENCES bd_medsuam.perfil_gamificado (id_perfil , id_paciente)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_MISSAO_GAMIFICADA_MEDICO_FANTASMA1
@@ -362,15 +361,6 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.atualizacao_adm (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE TABLE chat_messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,
-    receiver_id INT NOT NULL,
-    appointment_id INT NOT NULL,
-    message TEXT NOT NULL,
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS bd_medsuam.chat_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sender_id INT NOT NULL,
@@ -380,6 +370,26 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.chat_messages (
     message TEXT NOT NULL,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS cupons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_paciente INT NOT NULL,
+    cupom VARCHAR(10) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    resgatado ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
+    FOREIGN KEY (id_paciente) REFERENCES paciente(id_paciente)
+);
+
+CREATE TABLE IF NOT EXISTS `medicoes_glicemia` (
+  `id_medicao` int(11) NOT NULL AUTO_INCREMENT,
+  `id_paciente` int(11) NOT NULL,
+  `valor_glicemia` decimal(5,1) NOT NULL,
+  `tipo_medicao` enum('jejum','pre_refeicao','pos_refeicao') NOT NULL,
+  `data_medicao` date NOT NULL,
+  `hora_medicao` time NOT NULL,
+  `observacoes` text DEFAULT NULL,
+  PRIMARY KEY (`id_medicao`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

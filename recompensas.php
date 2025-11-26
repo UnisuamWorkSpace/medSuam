@@ -86,7 +86,8 @@ function verificarCooldown($ultimaRetirada, $diasCooldown) {
     
     $dataUltima = new DateTime($ultimaRetirada);
     $dataAtual = new DateTime();
-    return $dataAtual->diff($dataUltima)->days >= $diasCooldown;
+    // return $dataAtual->diff($dataUltima)->days >= $diasCooldown;
+    return true;
 }
 
 function diasRestantesCooldown($ultimaRetirada, $diasCooldown) {
@@ -96,7 +97,8 @@ function diasRestantesCooldown($ultimaRetirada, $diasCooldown) {
     $dataAtual = new DateTime();
     $diasPassados = $dataAtual->diff($dataUltima)->days;
 
-    return max(0, $diasCooldown - $diasPassados);
+    // return max(0, $diasCooldown - $diasPassados);
+    return 0; 
 }
 
 function formatarDataRetorno($ultimaRetirada, $diasCooldown) {
@@ -104,7 +106,8 @@ function formatarDataRetorno($ultimaRetirada, $diasCooldown) {
     
     $dataUltima = new DateTime($ultimaRetirada);
     $dataUltima->modify("+$diasCooldown days");
-    return $dataUltima->format('d/m/Y');
+    // return $dataUltima->format('d/m/Y');
+    return "";
 }
 
 // =============================
@@ -116,6 +119,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cupom'])) {
 
     $cupomPercentual = intval($_POST['cupom']);
     $cupomTxt = $cupomPercentual . "%";
+
+    switch ($cupomTxt) {
+        case '5%':
+            $ponto = 330;
+            break;
+        case '10%':
+            $ponto = 660; 
+            break;
+        case '15%':
+            $ponto = 990; 
+            break;
+        default:
+            # code...
+            break;
+    }
 
     if (isset($cupons[$cupomPercentual])) {
 
@@ -135,8 +153,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cupom'])) {
             // =============================
             // 4.2 Resetar os pontos do paciente
             // =============================
-            $stmt = $pdo->prepare("UPDATE paciente SET pontos = 0 WHERE id_paciente = ?");
+            
+            $stmt = $pdo ->prepare ("SELECT pontos FROM perfil_gamificado WHERE id_paciente = ? ");
             $stmt->execute([$idPaciente]);
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $pontosAtuais = $resultado ['pontos'];
+            $pontuacaoNova = $pontosAtuais - $ponto; 
+        
+            $stmt = $pdo->prepare("UPDATE perfil_gamificado SET pontos = ? WHERE id_paciente = ?");
+            
+            $stmt->execute([$pontuacaoNova, $idPaciente]);
 
             $mensagemResgate = "success|Cupom de {$cupomPercentual}% resgatado com sucesso!";
 
