@@ -24,7 +24,7 @@ try {
 $id = $_SESSION['id'];
 
 // Verificar se o paciente tem permissão para usar o Assistente Médico
-$sql_permissao = "SELECT * FROM assistente_medico WHERE id = ?";
+$sql_permissao = "SELECT * FROM assistente_medico WHERE id_paciente = ?";
 $stmt_permissao = $pdo->prepare($sql_permissao);
 $stmt_permissao->execute([$_SESSION['id']]);
 $permissao = $stmt_permissao->fetch(PDO::FETCH_ASSOC);
@@ -41,6 +41,9 @@ $sql_ultima = "SELECT * FROM medicoes_glicemia WHERE id_paciente = ?
 $stmt_ultima = $pdo->prepare($sql_ultima);
 $stmt_ultima->execute([$_SESSION['id']]);
 $ultima_medicao = $stmt_ultima->fetch(PDO::FETCH_ASSOC);
+$data_ultimamedicao = $ultima_medicao["data_medicao"] ?? "";
+$dia = date("d", strtotime($data_ultimamedicao));
+$dia_atual = date("d");
 
 // Buscar últimas 7 medições para o gráfico
 $sql_grafico = "SELECT * FROM medicoes_glicemia WHERE id_paciente = ?
@@ -161,9 +164,16 @@ $nome_paciente = $paciente ? $paciente['nome_paciente'] : "Paciente";
                 <canvas id="glicemiaChart"></canvas>
             </div>
 
-            <button class="add-button" onclick="window.location.href='registrarGlicemia.php'">
+            <!-- <button class="add-button" onclick="window.location.href='registrarGlicemia.php'">
                 + Adicionar Glicemia
-            </button>
+            </button> -->
+            <?php if ($dia != $dia_atual): ?>
+                <button class="add-button" onclick="window.location.href='registrarGlicemia.php'">
+                + Adicionar Glicemia
+                </button>
+            <?php else: ?>
+                <p>Sua glicemia já foi cadastrada hoje!</p>
+            <?php endif; ?>
 
         </main>
     </div>

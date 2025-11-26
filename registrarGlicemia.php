@@ -19,28 +19,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observacoes = $_POST['observacoes'];
     
     
-    // Validar dados
+//     // Validar dados
+//     if (!empty($valor_glicemia) && !empty($tipo_medicao) && !empty($data_medicao) && !empty($hora_medicao)) {
+//         try {
+//             $sql = "INSERT INTO medicoes_glicemia (id_paciente, valor_glicemia, tipo_medicao, data_medicao, hora_medicao, observacoes) 
+//                     VALUES (?, ?, ?, ?, ?, ?)";
+            
+//             $stmt = $conn->prepare($sql);
+//             $stmt->bind_param("idssss", $id_paciente, $valor_glicemia, $tipo_medicao, $data_medicao, $hora_medicao, $observacoes);
+//             $stmt->execute();
+            
+//             // Redirecionar para a página de análise após salvar
+//             header('Location: analiseGlicemia.php');
+//             exit;
+            
+//         } catch (Exception $e) {
+//             $_SESSION['mensagem_erro'] = "Erro ao registrar medição: " . $e->getMessage();
+//         }
+//     } else {
+//         $_SESSION['mensagem_erro'] = "Por favor, preencha todos os campos obrigatórios.";
+//     }
+//  }   
+//     // Redirecionar para evitar reenvio do formulário
+// 
+// 
+// 
+  // 1️⃣ Impedir mais de 1 registro por dia
+    $sql_check = "SELECT id_medicao
+              FROM medicoes_glicemia
+              WHERE id_paciente = ?
+              AND DATE(data_medicao) = ?
+              LIMIT 1";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("is", $id_paciente, $data_hoje);
+    $stmt_check->execute();
+    $res_check = $stmt_check->get_result();
+
+    if ($res_check->num_rows > 0) {
+        $_SESSION['mensagem_erro'] = "Você já registrou sua glicemia hoje.";
+        header("Location: analiseGlicemia.php");
+        exit();
+    }
+
+    // 2️⃣ Calcular pontuação conforme regras enviadas
+    $pontos = 0;
+
+    if ($tipo_medicao === "jejum" || $tipo_medicao === "pre_refeicao") {
+
+        if ($valor_glicemia >= 70 && $valor_glicemia <= 99) {
+            $pontos = 15; // excelente
+        } elseif ($valor_glicemia >= 100 && $valor_glicemia <= 125) {
+            $pontos = 5; // boa
+        }
+
+    } elseif ($tipo_medicao === "pos_refeicao") {
+
+        if ($valor_glicemia < 140) {
+            $pontos = 15; // excelente
+        } elseif ($valor_glicemia >= 140 && $valor_glicemia <= 179) {
+            $pontos = 5; // boa
+        }
+    }
+
+    // 3️⃣ Registrar medição
     if (!empty($valor_glicemia) && !empty($tipo_medicao) && !empty($data_medicao) && !empty($hora_medicao)) {
         try {
-            $sql = "INSERT INTO medicoes_glicemia (id_paciente, valor_glicemia, tipo_medicao, data_medicao, hora_medicao, observacoes) 
+
+            $sql = "INSERT INTO medicoes_glicemia 
+                    (id_paciente, valor_glicemia, tipo_medicao, data_medicao, hora_medicao, observacoes) 
                     VALUES (?, ?, ?, ?, ?, ?)";
-            
+
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("idssss", $id_paciente, $valor_glicemia, $tipo_medicao, $data_medicao, $hora_medicao, $observacoes);
             $stmt->execute();
-            
-            // Redirecionar para a página de análise após salvar
+
+            // 4️⃣ Atualizar pontos do perfil gamificado
+            $sql_up = "UPDATE perfil_gamificado SET pontos = pontos + ? WHERE id_paciente = ?";
+            $stmt_up = $conn->prepare($sql_up);
+            $stmt_up->bind_param("ii", $pontos, $id_paciente);
+            $stmt_up->execute();
+
+            // 5️⃣ Redirecionar após registrar
             header('Location: analiseGlicemia.php');
             exit;
-            
+
         } catch (Exception $e) {
             $_SESSION['mensagem_erro'] = "Erro ao registrar medição: " . $e->getMessage();
         }
     } else {
         $_SESSION['mensagem_erro'] = "Por favor, preencha todos os campos obrigatórios.";
     }
- }   
-    // Redirecionar para evitar reenvio do formulário
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

@@ -38,25 +38,126 @@ try {
     $hora_medicao = date('H:i', strtotime($medicao['hora_medicao']));
     $tipo_medicao = $medicao['tipo_medicao'];
     
-    // Determinar status baseado no valor da glicemia
+    // Determinar status baseado no valor da glicemia 
+    // if ($valor_glicemia < 70) {
+    //     $status = "Abaixo do ideal";
+    //     $mensagem = "Sua glicemia está baixa. Consulte seu médico.";
+    //     $classe_status = "baixa";
+    // } elseif ($valor_glicemia >= 70 && $valor_glicemia <= 99) {
+    //     $status = "Ótimo";
+    //     $mensagem = "O seu resultado é excelente!";
+    //     $classe_status = "otimo";
+    // } elseif ($valor_glicemia >= 100 && $valor_glicemia <= 125) {
+    //     $status = "Pré-diabetes";
+    //     $mensagem = "Fique atento e consulte seu médico.";
+    //     $classe_status = "pre-diabetes";
+    // } else {
+    //     $status = "Diabetes";
+    //     $mensagem = "Procure orientação médica imediatamente.";
+    //     $classe_status = "diabetes";
+    // }
+
+    // $tipo_medicao pode ser: "jejum", "pre_refeicao", "pos_refeicao"
+// $valor é o número da medição
+
+// if($tipo_medicao === "jejum" || $tipo_medicao === "pre_refeicao") {
+
+//     if($valor_glicemia  < 70) {
+//         $status  = "Preocupante";
+//     } elseif($valor_glicemia  >= 70 && $valor_glicemia  <= 99) {
+//         $status  = "Excelente";
+//     } elseif($valor_glicemia  >= 100 && $valor_glicemia  <= 125) {
+//         $status  = "Boa";
+//     } else { // 126+
+//         $status  = "Alerta máximo";
+//     }
+
+// } elseif($tipo_medicao === "pos_refeicao") {
+
+//     if($valor_glicemia  < 140) {
+//         $status  = "Excelente";
+//     } elseif($valor_glicemia  >= 140 && $valor_glicemia  <= 179) {
+//         $status  = "Boa";
+//     } elseif($valor_glicemia  >= 180 && $valor_glicemia  <= 250) {
+//         $status  = "Cuidado";
+//     } else { // acima de 250
+//         $status  = "Preocupante";
+//     }
+
+// } else {
+//     $status  = "Tipo de registro inválido!";
+// }
+
+// echo $status ;
+
+if ($tipo_medicao === "jejum" || $tipo_medicao === "pre_refeicao") { 
+
     if ($valor_glicemia < 70) {
-        $status = "Abaixo do ideal";
-        $mensagem = "Sua glicemia está baixa. Consulte seu médico.";
-        $classe_status = "baixa";
+        $status = "Preocupante";
+        $mensagem = "Sua glicemia está muito baixa. Isso exige atenção imediata.";
+        $classe_status = "preocupante";
     } elseif ($valor_glicemia >= 70 && $valor_glicemia <= 99) {
-        $status = "Ótimo";
-        $mensagem = "O seu resultado é excelente!";
-        $classe_status = "otimo";
+        $status = "Excelente";
+        $pontuacao = 15;
+        $mensagem = "Seu nível de glicose está ótimo!";
+        $classe_status = "excelente";
     } elseif ($valor_glicemia >= 100 && $valor_glicemia <= 125) {
-        $status = "Pré-diabetes";
-        $mensagem = "Fique atento e consulte seu médico.";
-        $classe_status = "pre-diabetes";
-    } else {
-        $status = "Diabetes";
-        $mensagem = "Procure orientação médica imediatamente.";
-        $classe_status = "diabetes";
+        $status = "Boa";
+        $pontuacao = 10;
+        $mensagem = "Sua glicemia está aceitável, mas fique atento.";
+        $classe_status = "boa";
+    } else { // 126+
+        $status = "Alerta máximo";
+        $mensagem = "Glicemia muito elevada. Procure orientação médica.";
+        $classe_status = "alerta-maximo";
     }
+
+} elseif ($tipo_medicao === "pos_refeicao") {
+
+    if ($valor_glicemia < 140) {
+        $status = "Excelente";
+        $pontuacao = 15;
+        $mensagem = "Seu nível pós-refeição está excelente.";
+        $classe_status = "excelente";
+    } elseif ($valor_glicemia >= 140 && $valor_glicemia <= 179) {
+        $status = "Boa";
+        $pontuacao = 10;
+        $mensagem = "O nível está bom, mas é bom monitorar.";
+        $classe_status = "boa";
+    } elseif ($valor_glicemia >= 180 && $valor_glicemia <= 250) {
+        $status = "Cuidado";
+        $mensagem = "Glicemia elevada, atenção!";
+        $classe_status = "cuidado";
+    } else { // acima de 250
+        $status = "Preocupante";
+        $mensagem = "Nível muito alto! Procure ajuda médica.";
+        $classe_status = "preocupante";
+    }
+
+} else {
+    $status = "Erro";
+    $mensagem = "Tipo de registro inválido.";
+    $classe_status = "erro";
+}
+
+if ($status != "Erro") {
+    $sql = "
+        SELECT pontos FROM perfil_gamificado WHERE id_paciente = ? 
+    ";
     
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id_paciente); // "i" significa integer
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $medicao = $result->fetch_assoc();
+} 
+
+
+
+
+
+
+
 } catch (Exception $e) {
     $erro = "Erro ao buscar dados: " . $e->getMessage();
 }
@@ -100,7 +201,6 @@ try {
                 
                 <div class="acoes">
                     <a href="userpage.php" class="btn-continuar">Continuar</a>
-                    <a href="registrarGlicemia.php" class="btn-nova-mediacao">Nova Medição</a>
                 </div>
             <?php endif; ?>
         </main>
