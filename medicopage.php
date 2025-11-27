@@ -92,7 +92,7 @@ if (mysqli_num_rows($result) === 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSuamt</title>
+    <title>MedSuam</title>
     <script>
         if(JSON.parse(localStorage.getItem("isDark"))) {
             console.log(JSON.parse(localStorage.getItem("isDark")));
