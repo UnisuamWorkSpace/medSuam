@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
         echo "<script> alert('Paciente cadastrado com sucesso !') </script>";
     }
 
-    header("Location: chatMedico.php?consulta=$consulta&paciente=$idpaciente");
-    exit;
+    /* header("Location: chatMedico.php?consulta=$consulta&paciente=$idpaciente");
+    exit; */
 }
 
 // logged doctor ID
@@ -99,14 +99,18 @@ $idmedico = $_SESSION['id_medico'] ?? 1;
                 </li>
                 <li>
                     <form action="./finalizarConsulta.php" method="post">
-                        <!-- <input type="hidden" name="consulta" value="<?php echo $consulta ?? ''; ?>"> -->
-                        <input type="hidden" name="paciente" value="<?php echo $idpaciente ?? ''; ?>">
-                        <input type="hidden" name="paciente" value="<?php echo $nomePaciente ?? ''; ?>">
-                        <input type="hidden" name="consulta" value="<?php echo htmlspecialchars($consulta)?>">
+                        <input type="hidden" name="finalizarConsulta" value="1">
+
+                        <!-- correct names -->
+                        <input type="hidden" name="idpaciente" value="<?php echo $idpaciente ?? ''; ?>">
+                        <input type="hidden" name="nomePaciente" value="<?php echo $nomePaciente ?? ''; ?>">
+                        <input type="hidden" name="consulta" value="<?php echo $consulta ?? ''; ?>">
+
                         <button class="finalizarConsultaBtn" name="finalizarConsulta" type="submit">
                             Finalizar Consulta 
                         </button>
                     </form>
+
                 </li>
             </ul>
         </div>
