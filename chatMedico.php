@@ -5,40 +5,45 @@ include "dbMedsuam.php";
 
 
 // POST variables from previous page
-if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
-    $consulta = mysqli_real_escape_string($conn, $_POST['consulta']);   // appointment_id
-    $idpaciente = mysqli_real_escape_string($conn, $_POST['paciente']); // receiver_id
-    $nomePaciente = mysqli_real_escape_string($conn, $_POST['nomePaciente']);
-    /* $parts = explode(" ", $nomePaciente); // splits by space
-    $nomePaciente = $parts[0];           // take the first part */
-    $sql = "SELECT status FROM consulta WHERE id_consulta = $consulta";
-    $result =  mysqli_query($conn, $sql);
-    $account = mysqli_fetch_assoc($result);
-    if($account['status'] === "finalizado") {
-       header('location: medicopage.php');
-    } 
-}elseif ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['nivelRisco'])) {
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['nivelRisco'])) {
+
+    // THIS IS NOW PRIORITY - INSERT / UPDATE WORKS
     $nivelRisco = mysqli_real_escape_string($conn, $_POST['nivelRisco']);
     $idpaciente = mysqli_real_escape_string($conn, $_POST['idpaciente']);
-    $consulta   = mysqli_real_escape_string($conn, $_POST['consulta']); // <-- FIXED
+    $consulta   = mysqli_real_escape_string($conn, $_POST['consulta']);
 
     $sql = "SELECT * FROM assistente_medico WHERE id_paciente = $idpaciente LIMIT 1";
     $result = mysqli_query($conn, $sql);
 
     if(mysqli_num_rows($result) === 1) {
-        $sql = "UPDATE assistente_medico SET nivel_risco = '$nivelRisco' WHERE id_paciente = $idpaciente";
-        $result =  mysqli_query($conn, $sql);
-        echo "<script> alert('Nível de risco atualizado com sucesso !') </script>";
-    }else {
-
-        $sql = "INSERT INTO assistente_medico (id_paciente, status_monitoramento, nivel_risco) VALUES ($idpaciente, 'ativo' , '$nivelRisco')";
-        $result =  mysqli_query($conn, $sql);
-        echo "<script> alert('Paciente cadastrado com sucesso !') </script>";
+        $sql = "UPDATE assistente_medico 
+                SET nivel_risco = '$nivelRisco' 
+                WHERE id_paciente = $idpaciente";
+        mysqli_query($conn, $sql);
+        echo "<script>alert('Nível de risco atualizado com sucesso!')</script>";
+    } else {
+        $sql = "INSERT INTO assistente_medico (id_paciente, status_monitoramento, nivel_risco) 
+                VALUES ($idpaciente, 'ativo', '$nivelRisco')";
+        mysqli_query($conn, $sql);
+        echo "<script>alert('Paciente cadastrado com sucesso!')</script>";
     }
 
-    /* header("Location: chatMedico.php?consulta=$consulta&paciente=$idpaciente");
-    exit; */
+} elseif ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['consulta'])) {
+
+    // This block runs only for the OTHER form
+    $consulta     = mysqli_real_escape_string($conn, $_POST['consulta']);
+    $idpaciente   = mysqli_real_escape_string($conn, $_POST['paciente']);
+    $nomePaciente = mysqli_real_escape_string($conn, $_POST['nomePaciente']);
+
+    $sql = "SELECT status FROM consulta WHERE id_consulta = $consulta";
+    $result = mysqli_query($conn, $sql);
+    $account = mysqli_fetch_assoc($result);
+
+    if ($account['status'] === "finalizado") {
+        header('location: medicopage.php');
+    }
 }
+
 
 // logged doctor ID
 $idmedico = $_SESSION['id_medico'] ?? 1;
