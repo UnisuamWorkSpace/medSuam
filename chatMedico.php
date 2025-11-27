@@ -56,6 +56,7 @@ $idmedico = $_SESSION['id_medico'] ?? 1;
     <title>Chat Médico</title>
 
     <link rel="stylesheet" href="./css/chat.css">
+    <link rel="icon" type="image/png" href="./images/doctor_stethoscope.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!--  integrity="sha512-…:contentReference[oaicite:2]{index=2}" -->
 
