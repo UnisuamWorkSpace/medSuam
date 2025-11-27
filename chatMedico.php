@@ -143,13 +143,14 @@ const sender_role    = "medico";
 const receiver_id    = <?php echo json_encode($idpaciente ?? 1); ?>;
 const appointment_id = <?php echo json_encode($consulta ?? 1); ?>;
 const nomePaciente   = <?php echo json_encode($nomePaciente ?? "Paciente"); ?>;
+const baseUrl = window.location.origin;
 
 // Load messages every 2 seconds
 setInterval(loadMessages, 2000);
 loadMessages();
 
 function loadMessages() {
-    fetch("http://localhost/medSuam-frontend/getMessages.php?appointment_id=" + appointment_id)
+    fetch(`${baseUrl}/medSuam/getMessages.php?appointment_id=${appointment_id}`)
     .then(r => r.json())
     .then(data => {
         let chatBox = document.getElementById("chatBox");
@@ -190,7 +191,7 @@ function sendMessage() {
     formData.append("appointment_id", appointment_id);
     formData.append("message", text);
 
-    fetch("http://localhost/medSuam-frontend/sendMessages.php", {
+    fetch(`${baseUrl}/medSuam/sendMessages.php`, {
         method: "POST",
         body: formData
     })
