@@ -212,7 +212,7 @@
                     </div>
                     <div class="dadosContainerContent">
                         <strong>Rg</strong>
-                        <span><?php echo $rgTable['numero_rg']?></span>
+                        <span><?php echo $rgTable['numero_rg'] ?? "N/A"?></span>
                         <div class="inputsContainer column hide">
                             <label>Número do RG</label>
                             <input id="rg" type="text" name="numeroRg" placeholder="Número do RG" value="<?php echo $rgTable['numero_rg']?>">
