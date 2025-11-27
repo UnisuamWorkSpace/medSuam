@@ -74,7 +74,7 @@
         <ul>
             <li>
                 <div class="menuIconContainer">
-                <a href="../userpage.html"><img class="logo" src="../images/Logo_medsuam-removebg-preview (1).png" alt="logo"/></a>
+                <a href="../userpage.php"><img class="logo" src="../images/Logo_medsuam-removebg-preview (1).png" alt="logo"/></a>
                  <label for="sidebar" class="menuIcon">
                     <i class="fas fa-angle-double-left"></i>                                                                                                                    
                 </label>
@@ -86,26 +86,26 @@
                 </label>
             </li>
             <li>
-                <a href="../userpage.html" class="linkPage">
+                <a href="../userpage.php" class="linkPage">
                     <i class="fa-solid fa-house"></i>
                     <span>Início</span>
                 </a>
             </li>
             <li>
-                <a href="./exames.html" class="linkPage">
+                <a href="./exames.php" class="linkPage">
                     <i class="fa-solid fa-flask"></i>
                     <span>Exames</span>
                 </a>
             </li>
             <li>
-                <a href="./vacinas.html" class="linkPage">
+                <a href="./vacinas.php" class="linkPage">
                     <i class="fas fa-syringe"></i>
                     <span>Vacinas</span>
                 </a>
             </li>
             
             <li>
-                <a href="./consultas.html" class="linkPage currentPage">
+                <a href="./consultas.php" class="linkPage currentPage">
                     <i class="fa fa-stethoscope"></i>
                     <span>Consultas</span>
                 </a>
@@ -115,13 +115,13 @@
                 <span class="geralSpan">Geral</span>
             </li>
             <li>
-                <a href="./dadosCadastrais.html" class="linkPage">
+                <a href="./dadosCadastrais.php" class="linkPage">
                     <i class="fas fa-gear"></i>
                     <span>Dados Cadastrais</span>
                 </a>
             </li>
             <li>
-                <a href="./termos.html" class="linkPage">
+                <a href="./termos.php" class="linkPage">
                 <i class="fas fa-book"></i>
                 <span>Termos</span>
                 </a>
