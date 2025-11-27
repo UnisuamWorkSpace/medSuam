@@ -2,9 +2,9 @@
 session_start();
 
 $host = "localhost";
-$dbname = "bd_medsuam";   // coloque o nome exato do seu banco
-$user = "root";        // ajuste conforme seu ambiente
-$pass = "";            // ajuste se tiver senha
+$dbname = "bd_medsuam";
+$user = "root";
+$pass = "";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
@@ -14,7 +14,6 @@ catch (PDOException $e) {
     die("Erro ao conectar ao banco de dados: " . $e->getMessage());
 }
 
-// ID do paciente logado
 $idPaciente = $_SESSION['id_paciente'];
 
 // =============================
@@ -82,31 +81,14 @@ $cupons = [
 // FUNÇÕES DE COOLDOWN
 // =============================
 function verificarCooldown($ultimaRetirada, $diasCooldown) {
-    if (empty($ultimaRetirada)) return true;
-    
-    $dataUltima = new DateTime($ultimaRetirada);
-    $dataAtual = new DateTime();
-    // return $dataAtual->diff($dataUltima)->days >= $diasCooldown;
-    return true;
+    return true; // cooldown desativado por enquanto
 }
 
 function diasRestantesCooldown($ultimaRetirada, $diasCooldown) {
-    if (empty($ultimaRetirada)) return 0;
-    
-    $dataUltima = new DateTime($ultimaRetirada);
-    $dataAtual = new DateTime();
-    $diasPassados = $dataAtual->diff($dataUltima)->days;
-
-    // return max(0, $diasCooldown - $diasPassados);
-    return 0; 
+    return 0;
 }
 
 function formatarDataRetorno($ultimaRetirada, $diasCooldown) {
-    if (empty($ultimaRetirada)) return "";
-    
-    $dataUltima = new DateTime($ultimaRetirada);
-    $dataUltima->modify("+$diasCooldown days");
-    // return $dataUltima->format('d/m/Y');
     return "";
 }
 
@@ -121,63 +103,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cupom'])) {
     $cupomTxt = $cupomPercentual . "%";
 
     switch ($cupomTxt) {
-        case '5%':
-            $ponto = 330;
-            break;
-        case '10%':
-            $ponto = 660; 
-            break;
-        case '15%':
-            $ponto = 990; 
-            break;
-        default:
-            # code...
-            break;
+        case '5%':  $ponto = 330; break;
+        case '10%': $ponto = 660; break;
+        case '15%': $ponto = 990; break;
     }
 
     if (isset($cupons[$cupomPercentual])) {
 
         $cupom = $cupons[$cupomPercentual];
 
-        $pontosCorretos = ($pontos == $cupom['pontos']);
+        // FIXED — user can redeem if they have MORE or EQUAL points
+        $pontosCorretos = ($pontos >= $cupom['pontos']);
         $cooldownPassou = verificarCooldown($cupom['ultima_retirada'], $cupom['cooldown']);
 
         if ($pontosCorretos && $cooldownPassou) {
 
-            // =============================
             // 4.1 Registrar cupom
-            // =============================
             $stmt = $pdo->prepare("INSERT INTO cupons (id_paciente, cupom) VALUES (?, ?)");
             $stmt->execute([$idPaciente, $cupomTxt]);
 
-            // =============================
-            // 4.2 Resetar os pontos do paciente
-            // =============================
-            
-            $stmt = $pdo ->prepare ("SELECT pontos FROM perfil_gamificado WHERE id_paciente = ? ");
-            $stmt->execute([$idPaciente]);
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $pontosAtuais = $resultado ['pontos'];
-            $pontuacaoNova = $pontosAtuais - $ponto; 
-        
+            // 4.2 Subtrair pontos
+            $pontuacaoNova = $pontos - $ponto;
+
             $stmt = $pdo->prepare("UPDATE perfil_gamificado SET pontos = ? WHERE id_paciente = ?");
-            
             $stmt->execute([$pontuacaoNova, $idPaciente]);
 
-            $mensagemResgate = "success|Cupom de {$cupomPercentual}% resgatado com sucesso!";
-
-            // Recarregar a página para atualizar pontos e cooldown
             header("Location: recompensas.php?status=success");
             exit;
 
         } else {
-
             if (!$pontosCorretos) {
-                $mensagemResgate = "error|Você precisa ter exatamente {$cupom['pontos']} pontos.";
-            } else {
-                $mensagemResgate = "error|Você só poderá resgatar novamente em " . 
-                                    formatarDataRetorno($cupom['ultima_retirada'], $cupom['cooldown']);
+                $mensagemResgate = "error|Você precisa ter pelo menos {$cupom['pontos']} pontos.";
             }
         }
     }
@@ -219,13 +175,12 @@ list($tipoMensagem, $textoMensagem) = $mensagemResgate ? explode('|', $mensagemR
         <div class="coupons-grid">
             <?php foreach ($cupons as $percentual => $cupom): ?>
                 <?php
-                $pontosCorretos = ($pontos == $cupom['pontos']);
+                // FIXED — now allows >= instead of ==
+                $pontosCorretos = ($pontos >= $cupom['pontos']);
                 $cooldownPassou = verificarCooldown($cupom['ultima_retirada'], $cupom['cooldown']);
                 $disponivel = $pontosCorretos && $cooldownPassou;
-                $diasRestantes = diasRestantesCooldown($cupom['ultima_retirada'], $cupom['cooldown']);
-                $dataRetorno = formatarDataRetorno($cupom['ultima_retirada'], $cupom['cooldown']);
                 ?>
-                
+
                 <div class="coupon-card <?php echo $disponivel ? 'available' : 'unavailable'; ?>">
                     <div class="coupon-header">
                         <h2 class="discount"><?php echo $percentual; ?>%</h2>
@@ -251,47 +206,32 @@ list($tipoMensagem, $textoMensagem) = $mensagemResgate ? explode('|', $mensagemR
                         <?php else: ?>
                             <div class="unavailable-message">
                                 <?php if (!$pontosCorretos): ?>
-                                    <?php if ($pontos < $cupom['pontos']): ?>
-                                        Faltam <?php echo ($cupom['pontos'] - $pontos); ?> pontos
-                                    <?php else: ?>
-                                        Necessita exatamente <?php echo $cupom['pontos']; ?> pontos
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    Você só poderá resgatar novamente em <?php echo $dataRetorno; ?>
+                                    Faltam <?php echo ($cupom['pontos'] - $pontos); ?> pontos
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </div>
                 </div>
+
             <?php endforeach; ?>
         </div>
 
         <div class="info-section">
             <h3>Como funciona?</h3>
-            <p>Os cupons ficam disponíveis quando você atinge exatamente a pontuação necessária. Após o resgate, seus pontos voltam para zero e você poderá resgatar o mesmo cupom novamente após o período indicado.</p>
+            <p>Você pode resgatar qualquer cupom se tiver pontos suficientes. O valor do cupom será subtraído da sua pontuação.</p>
         </div>
     </div>
 
     <script>
-        // Confirmação antes do resgate
         document.addEventListener('DOMContentLoaded', function() {
             const forms = document.querySelectorAll('.redeem-form');
             
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
-                    if (!confirm('Tem certeza que deseja resgatar este cupom? Seus pontos voltarão para zero após o resgate.')) {
+                    if (!confirm('Tem certeza que deseja resgatar este cupom?')) {
                         e.preventDefault();
                     }
                 });
-            });
-            
-            // Fechar alertas automaticamente após 5 segundos
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                }, 5000);
             });
         });
     </script>
