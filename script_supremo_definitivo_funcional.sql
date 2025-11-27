@@ -40,6 +40,12 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.paciente (
 )
 ENGINE = InnoDB;
 
+LOCK TABLES `paciente` WRITE;
+/*!40000 ALTER TABLE `paciente` DISABLE KEYS */;
+INSERT INTO `paciente` VALUES (1,'Igor Da Silva Sant Anna','206.891.777-71','2004-12-31','igorsantanna@souunisuam.com.br','$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS','masculino','ativo',NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `paciente` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 -- -----------------------------------------------------
 -- Table bd_medsuam.medico
@@ -61,6 +67,13 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.medico (
   UNIQUE INDEX email_medico_UNIQUE (email_medico ASC)
 )
 ENGINE = InnoDB;
+
+LOCK TABLES `medico` WRITE;
+/*!40000 ALTER TABLE `medico` DISABLE KEYS */;
+INSERT INTO `medico` VALUES (1,'Igor Da Silva Sant Anna','sdfdsafsdfsadf', '$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS','silva.igor.014@gmail.com','masculino','2004-12-31','206.891.777-71','ativo',NULL,'RJ');
+/*!40000 ALTER TABLE `medico` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 
 -- -----------------------------------------------------
