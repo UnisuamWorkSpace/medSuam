@@ -39,6 +39,16 @@
         }
 
     }
+
+    $parts = explode(" ", $_SESSION['paciente']); // splits by space
+    $primeiroNome = $parts[0];           // take the first part
+
+    $sql = "SELECT * FROM assistente_medico WHERE id_paciente = {$_SESSION['id']} LIMIT 1";
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) === 1) {
+        $_SESSION['perfilGamificado'] = true;
+    }
 ?>
 
 
@@ -91,26 +101,29 @@
                 </label>
             </li>
             <li>
+                <span>Olá <?php echo $primeiroNome . ' !'?> </span>
+            </li>
+            <li>
                 <a href="../../userpage.php" class="linkPage">
                     <i class="fa-solid fa-house"></i>
                     <span>Início</span>
                 </a>
             </li>
             <li>
-                <a href="../exames.html" class="linkPage">
+                <a href="../exames.php" class="linkPage">
                     <i class="fa-solid fa-flask"></i>
                     <span>Exames</span>
                 </a>
             </li>
             <li>
-                <a href="../vacinas.html" class="linkPage">
+                <a href="../vacinas.php" class="linkPage">
                     <i class="fas fa-syringe"></i>
                     <span>Vacinas</span>
                 </a>
             </li>
             
             <li>
-                <a href="../consultas.html" class="linkPage currentPage">
+                <a href="../consultas.php" class="linkPage currentPage">
                     <i class="fa fa-stethoscope"></i>
                     <span>Consultas</span>
                 </a>
@@ -120,7 +133,7 @@
                 <span class="geralSpan">Geral</span>
             </li>
             <li>
-                <a href="../dadosCadastrais.html" class="linkPage">
+                <a href="../dadosCadastrais.php" class="linkPage">
                     <i class="fas fa-gear"></i>
                     <span>Dados Cadastrais</span>
                 </a>
@@ -131,6 +144,14 @@
                 <span>Termos</span>
                 </a>
             </li>
+            <?php if(isset($_SESSION['perfilGamificado']) && $_SESSION['perfilGamificado']):?>
+            <li>
+                <a href="./assisMedico.php" id="acessibilidadeLabel" class="linkPage" for="acessibilidade">
+                    <i class="fas fa-robot"></i>
+                    Plano-gamificado
+                </a>
+            </li>
+            <?php endif;?>
             <li>
                 <label id="acessibilidadeLabel" class="linkPage" for="acessibilidade">
                     <i class="fa fa-universal-access"></i>

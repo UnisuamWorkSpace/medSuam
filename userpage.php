@@ -78,13 +78,13 @@
                 </a>
             </li>
             <li>
-                <a href="./pages/exames.html" class="linkPage">
+                <a href="./pages/exames.php" class="linkPage">
                     <i class="fa-solid fa-flask"></i>
                     <span>Exames</span>
                 </a>
             </li>
             <li>
-                <a href="./pages/vacinas.html" class="linkPage">
+                <a href="./pages/vacinas.php" class="linkPage">
                     <i class="fas fa-syringe"></i>
                     <span>Vacinas</span>
                 </a>
@@ -101,13 +101,13 @@
                 <span class="geralSpan">Geral</span>
             </li>
             <li>
-                <a href="./pages/dadosCadastrais.html" class="linkPage">
+                <a href="./pages/dadosCadastrais.php" class="linkPage">
                     <i class="fas fa-gear"></i>
                     <span>Dados Cadastrais</span>
                 </a>
             </li>
             <li>
-                <a href="./pages/termos.html" class="linkPage">
+                <a href="./pages/termos.php" class="linkPage">
                 <i class="fas fa-book"></i>
                 <span>Termos</span>
                 </a>
@@ -153,42 +153,42 @@
                     </div>
                 </button>
             
-                <button type="button"  class="cardContainer consultas_prescricoes_atestados">
+                <!-- <button type="button"  class="cardContainer consultas_prescricoes_atestados">
                      <div class="cardContent">
                         <i class="bi bi-file-earmark-medical"></i>
                         <span class="menor">Consultas, Prescrições, Atestados</span>
                     </div>
-                </button>
+                </button> -->
                 <button type="button" class="cardContainer agendarExames">
                     <div class="cardContent">
                     <i class="bi bi-calendar2-week"></i>
                         <span>Agendar Exames</span>
                     </div>
                 </button>
-                <button type="button" class="cardContainer agendarConsultas">
+                <a href="./pages/consultas.php" class="cardContainer agendarConsultas">
                     <div class="cardContent ">
                         <i class="bi bi-calendar-plus"></i>
                         <span>Agendar Consultas</span>
                     </div>
-                </button>
-                <button type="button" class="cardContainer resultado_de_exames">
+                </a>
+                <a href="./pages/exames.php" class="cardContainer resultado_de_exames">
                     <div class="cardContent">
                         <i class="fa-solid fa-flask"></i>
                         <span>Resultados de exames</span>
                     </div>
-                </button>
-                <button type="button"  class="cardContainer agendarVacina">
+                </a>
+                <a href="./pages/vacinas.php" class="cardContainer agendarVacina">
                     <div class="cardContent">
                         <i class="fas fa-syringe"></i>
                         <span>Agendar Vacinas</span>
                     </div>
-                </button>
+                </a>
                 <a href="./pages/consultaonline.php" class="cardContainer consultaOnline">
                     <div class="cardContent">
                         <i class="bi bi-camera-video"></i>
                         <span>Consulta online 24h</span>
                     </div>
-    </a>
+                </a>
             </div>
         </section>
 
