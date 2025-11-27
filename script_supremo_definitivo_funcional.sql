@@ -42,7 +42,34 @@ ENGINE = InnoDB;
 
 LOCK TABLES `paciente` WRITE;
 /*!40000 ALTER TABLE `paciente` DISABLE KEYS */;
-INSERT INTO `paciente` VALUES (1,'Igor Da Silva Sant Anna','206.891.777-71','2004-12-31','igorsantanna@souunisuam.com.br','$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS','masculino','ativo',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO paciente (
+    nome_paciente,
+    cpf_paciente,
+    data_nasc_paciente,
+    email_paciente,
+    senha_paciente,
+    sexo_paciente,
+    status_paciente,
+    peso,
+    altura,
+    tipo_sanguineo,
+    nome_social_paciente,
+    estado_civil
+)
+VALUES (
+    'Igor Da Silva Sant Anna',
+    '206.891.777-71',
+    '2004-12-31',
+    'igorsantanna@souunisuam.com.br',
+    '$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS',
+    'masculino',
+    'ativo',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+);
 /*!40000 ALTER TABLE `paciente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +97,29 @@ ENGINE = InnoDB;
 
 LOCK TABLES `medico` WRITE;
 /*!40000 ALTER TABLE `medico` DISABLE KEYS */;
-INSERT INTO `medico` VALUES (1,'Igor Da Silva Sant Anna','sdfdsafsdfsadf', '$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS','silva.igor.014@gmail.com','masculino','2004-12-31','206.891.777-71','ativo',NULL,'RJ');
+INSERT INTO medico (
+    nome_medico,
+    crm,
+    senha_medico,
+    email_medico,
+    sexo_medico,
+    data_nasc_medico,
+    cpf_medico,
+    status_medico,
+    nome_social_medico,
+    crm_estado
+) VALUES (
+    'Igor Da Silva Sant Anna',
+    'sdfdsafsdfsadf',
+    '$2y$10$KBNbCiCRt/ShikZt8eBc2uHU3ouPScZ3i8kiQx/37fDNRAq.IhsCS',
+    'silva.igor.014@gmail.com',
+    'masculino',
+    '2004-12-31',
+    '206.891.777-71',
+    'ativo',
+    NULL,
+    'RJ'
+);
 /*!40000 ALTER TABLE `medico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,6 +141,12 @@ CREATE TABLE IF NOT EXISTS bd_medsuam.especialidade (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+LOCK TABLES `especialidade` WRITE;
+/*!40000 ALTER TABLE `especialidade` DISABLE KEYS */;
+INSERT INTO especialidade VALUES (1,1,'Cardiologia','');
+/*!40000 ALTER TABLE `especialidade` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 -- -----------------------------------------------------
