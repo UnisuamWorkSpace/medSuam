@@ -65,6 +65,10 @@ $idmedico = $_SESSION['id_medico'] ?? 1;
     <p>Basta selecionar o nível de risco do paciente e clicar "pronto" !</p>
     <div>
     <input type="hidden" name="idpaciente" value="<?php echo $idpaciente; ?>">
+    <input type="hidden" name="consulta" value="<?php echo $consulta ?? ''; ?>"> <!-- FIXED HERE -->
+    <input type="hidden" name="nomePaciente" value="<?php echo $nomePaciente ?? ''; ?>">
+    <input type="hidden" name="paciente" value="<?php echo $idpaciente ?? ''; ?>">
+
     <label class="agendamentoInput">
         <input type="radio" name="nivelRisco" value="leve" required>
             Leve              
