@@ -155,6 +155,9 @@ $nome_paciente = $paciente ? $paciente['nome_paciente'] : "Paciente";
                 <?php if ($meta_atingida): ?>
                     <div class="meta-icon">✓</div>
                     <h3>Meta atingida!</h3>
+                <?php elseif ($data_ultimamedicao === ""): ?>
+                    <div class="meta-icon">?</div>
+                    <h3>Registre a sua primeira medição...</h3>
                 <?php else: ?>
                     <div class="meta-icon alert">!</div>
                     <h3>Fora da meta</h3>
